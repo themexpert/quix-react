@@ -1,0 +1,341 @@
+{% set id = field('id') %}
+{% set class = field('class') %}
+{# repeater fields #}
+{% set fieldsGroup = field('slider-pro_fg_element') %}
+
+{# alignment #}
+{% set verticalPosition = field('vertical_position').value %}
+{% set horizontalPosition = field('horizontal_position').value %}
+{% set textAlign = field('text_alignment').value %}
+
+{# display #}
+{% set showTitle = field('show_title') %}
+{% set showContent = field('show_content') %}
+{% set showButton = field('show_button') %}
+
+{# overlay & animation #}
+{% set sliderAnimation = field('slide_animation')|default('slide') %}
+{% set kenBurnsEff = field('slide_kenburns')|default(false) %}
+{% set kenBurnsRev = field('slide_kenburns_reverse')|default(false) %}
+{% set autoplay = field('autoplay')|default('false') %}
+{% set autoplaySpeed = field('autoplay_speed')|default('5000') %}
+{% set pauseOnHover = field('pause_on_hover')|default('false') %}
+{% set infiniteLoop = field('infinite_loop')|default('true') %}
+
+{# Enable Overlay #}
+{% set enaOverlay = field("enable_overlay")|default(false) %}
+
+{# Content Transition #}
+{% set contentTransition = field("content_transitions")|default(false) %}
+{% if contentTransition == true %}
+    {% set conTranEff = field("transitions_effect") %}
+{% endif %}
+
+{# Content Parallax #}
+{% set forHeading = field("for_heading")|default(false) %}
+{% if forHeading == true %}
+    {% set headingEff = field("heading_effect") %}
+    {% set headingEffIn = field("heading_paraIN").value %}
+    {% set headingEffOut = field("heading_ParaOut").value %}
+{% endif %}
+
+{% set fordesc = field("for_desc")|default(false) %}
+{% if fordesc == true %}
+    {% set descEff = field("desc_effect") %}
+    {% set descEffIn = field("desc_paraIN").value %}
+    {% set descEffOut = field("desc_ParaOut").value %}
+{% endif %}
+
+{% set forbutton = field("for_button")|default(false) %}
+{% if forbutton == true %}
+    {% set buttonEff = field("button_effect") %}
+    {% set buttonEffIn = field("button_paraIN").value %}
+    {% set buttonEffOut = field("button_ParaOut").value %}
+{% endif %}
+
+
+{# height #}
+{% set heightOption = field('height_option') %}
+
+{# navigation #}
+{% set navigationMargin = field('navigation_margin') %}
+{% if navigationMargin != 'none' %}
+    {% set navigationMarginClass = 'qx-position-' ~ navigationMargin %}
+{% else %}
+    {% set navigationMarginClass = 'qx-position-none' %}
+{% endif %}
+
+{% set slideNav = field('slide_nav') %}
+{% set navigation = field('navigation') %}
+{% set outsidePosition = field('navigation_outside_position') %}
+{% set insidePosition = field('navigation_inside_position') %}
+
+{% if slideNav != 'none' %}
+{% set slideNavClass = 'qx-position-' ~ slideNav ~ ' ' ~ navigationMarginClass %}
+{% endif %}
+
+{% if navigation == 'dot-inside' %}
+{% set dotNavigationClass = 'qx-position-' ~ insidePosition ~ ' ' ~ navigationMarginClass %}
+{% else %}
+{% set dotNavigationClass = 'qx-flex qx-flex-' ~ outsidePosition ~ ' ' ~ navigationMarginClass  %}
+{% endif %}
+
+{% if navigation == 'thumb-inside' %}
+{% set thumbNavigationClass = 'qx-position-' ~ insidePosition ~ ' ' ~ navigationMarginClass %}
+{% else %}
+{% set thumbNavigationClass = 'qx-flex qx-flex-' ~ outsidePosition ~ ' ' ~ navigationMarginClass %}
+{% endif %}
+
+{# Bar Nav #}
+{% set bar_navigation = field('bar_navigation') %}
+{% set bar_vertical = field('bar_vertical') %}
+{% set enable_barOut = field('enable_barOut') %}
+{% set barNavPosition = field('barNav_position') %}
+{% set barNavMargin = field('barNav_margin') %}
+{% if barNavMargin != 'none' %}
+    {% set barNavMarginClass = 'qx-position-' ~ barNavMargin %}
+{% else %}
+    {% set barNavMarginClass = 'qx-position-none' %}
+{% endif %}
+{% set barNavPosClass = 'qx-position-' ~ barNavPosition ~ ' ' ~ barNavMarginClass %}
+
+{# Icon #}
+{% set enable_icon = field('enable_icon') %}
+{% set src = field('icon') %}
+{% set icon = '' %}
+{% set icon_alignment = field('icon_alignment') | default({'value' : 'left'}) %}
+{% if src.media %}
+    {% if src.media.type == "svg" %}
+        {% set icon = loadSvg(src.media.svg)|raw %}
+    {% endif %}
+{% elseif src.url %}
+    {% set icon = image(src.url, alt_text) %}
+{% endif %}
+
+{# behaviours #}
+{% set classes = classNames('qx-element qx-slider-pro-v2', visibilityClass(node.visibility), class) %}
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+    
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        {% if fieldsGroup %}
+        <div class="qx-position-relative qx-visible-toggle qx-light slider-height-{{heightOption}}"
+        qx-slideshow="animation: {{sliderAnimation}};autoplay: {{autoplay}};autoplayInterval: {{autoplaySpeed}};pauseOnHover: {{pauseOnHover}};finite: {{infiniteLoop ? 'false' : 'true'}};"
+        id="slider-{{ id }}">
+
+            {% if heightOption == 'default' %}
+                <ul qx-height-match="target: > li > img ; row: false" class="qx-slideshow-items">
+            {% elseif (heightOption == 'custom') %}
+                <ul class="qx-slideshow-items custom-height">
+            {% else %}
+                {# apply these on update; offset-top: true; offset-bottom: true #}
+                <ul qx-height-viewport="" class="qx-slideshow-items">
+            {% endif %}
+
+
+                {% for index, fields in fieldsGroup %}
+                    {% set data = fieldsGroup(fieldsGroup, index) %}
+                    {# ---------------------------------------------------------------
+                        Don't forget to change key of data when you update config.yml
+                    -------------------------------------------------------------------#}
+
+                    {# title #}
+                    {% set title = data.title.value %}
+                    {% set description = data.description.value %}
+                    {% set background = data.background.value %}
+                    {% set backgroundOverlay = data.overlay_bg_color.value %}
+                    {% set buttonText = data.button_text.value %}
+                    {% set buttonLink = data.link.value %}
+
+                    {% set verticalPosition =  verticalPosition %}
+                    {% set horizontalPosition =  horizontalPosition %}
+
+                    {% set contentPosition = 'qx-position-' ~ verticalPosition ~ '-' ~ horizontalPosition %}
+                    {% if contentPosition == 'qx-position-center-center' %}
+                        {% set contentPosition = 'qx-position-center' %}
+                    {% endif %}
+                    {% set contentAlignment = 'qx-text-' ~ textAlign %}
+                    {% set contentAlignClasses =  contentPosition ~ ' ' ~ contentAlignment %}
+
+                    {% if buttonLink.nofollow %}
+                        {% set nofollow = "nofollow" %}
+                    {% else %}
+                        {% set nofollow = ""%}
+                    {% endif %}
+
+                    {% set buttonClasses = "qx-btn qx-slider-btn qx-flex qx-flex-middle qx-flex-inline" %}
+                    {# --------------------------------------------------------------- #}
+                    <li class="qx-col-md-12 slider-pro-item" id="{{ id }}-{{ index }}">
+                        {% if background.media %}
+                            {% if background.media.type == "svg" %}
+                                {{ loadSvg(background.media.svg) }}
+                            {% elseif kenBurnsEff == true %}
+                                <div class="{{kenBurnsEff ? 'qx-animation-kenburns' : ''}} {{kenBurnsRev ? 'qx-animation-reverse' : ''}}">
+                                    {{ image( background.media.image, title, '', '', true) }}
+                                </div>
+                            {% else %}
+                                {{ image( background.media.image, title, '', '', true) }}
+                            {% endif %}
+                        {% elseif background.url %}
+                            {{ image(background.url, title, '', '', true) }}
+                        {% endif %}
+
+                        {% if enaOverlay == true %}
+                            <div class="qx-overlay-primary qx-position-cover"></div>
+                        {% endif %}
+                        <div class="{{contentAlignClasses}} qx-light slider-content-wrapper">
+                            <div class="qx-transition-wrapper slide-content {{conTranEff}}">
+                                {% if forHeading == true %}
+                                    {% if showTitle %}
+                                        <h2 qx-slider-parallax="{{headingEff}}: {{headingEffIn}},{{headingEffOut}}">{{ title | raw }}</h2>
+                                    {% endif %}
+                                {% else %}
+                                    {% if showTitle %}
+                                        <h2>{{ title | raw }}</h2>
+                                    {% endif %}                                
+                                {% endif %}
+
+                                {% if fordesc %}
+                                    {% if showContent %}
+                                        <p qx-slider-parallax="{{descEff}}: {{descEffIn}},{{descEffOut}}">{{ description|raw }}</p>
+                                    {% endif %}
+                                {% else %}
+                                    {% if showContent %}
+                                        <p>{{ description|raw }}</p>
+                                    {% endif %}                                
+                                {% endif %}
+
+                                {% if forbutton %}
+                                    {% if showButton %}
+                                        {% if buttonText %}
+                                            <div qx-slider-parallax="{{buttonEff}}: {{buttonEffIn}},{{buttonEffOut}}">
+                                                {% if enable_icon == true %}
+                                                    {% if icon_alignment.value == 'left' %}
+                                                        {{ ( '' ~ icon ~ ' ' ~ '<span>' ~ buttonText ~ '</span>') | link(buttonLink, buttonClasses) }}
+                                                    {% else %}
+                                                        {{ ('' ~ '<span>' ~ buttonText ~ '</span>' ~ ' ' ~ icon ~ '') | link(buttonLink, buttonClasses) }}
+                                                    {% endif %}
+                                                {% else %}                                           
+                                                    {{ buttonText | link(buttonLink, buttonClasses) }}
+                                                {% endif %}                                                
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if showButton %}
+                                        {% if buttonText %}
+                                            {% if enable_icon == true %}
+                                                {% if icon_alignment.value == 'left' %}
+                                                    {{ ( '' ~ icon ~ ' ' ~ '<span>' ~ buttonText ~ '</span>') | link(buttonLink, buttonClasses) }}
+                                                {% else %}
+                                                    {{ ('' ~ '<span>' ~ buttonText ~ '</span>' ~ ' ' ~ icon ~ '') | link(buttonLink, buttonClasses) }}
+                                                {% endif %}
+                                            {% else %}                                           
+                                                {{ buttonText | link(buttonLink, buttonClasses) }}
+                                            {% endif %}
+                                        {% endif %}                                
+                                    {% endif %}                                
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% if slideNav != 'none' %}
+                {% if slideNav != "default" %}
+                    <div class="qx-slidenav-container {{slideNavClass}} qx-visible@s ">
+                        <a class="qx-hidden-hover" href="#" qx-slidenav-previous qx-slideshow-item="previous"></a>
+                        <a class="qx-hidden-hover" href="#" qx-slidenav-next qx-slideshow-item="next"></a>
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+            {% if slideNav != 'none' %}
+                {% if slideNav == "default" %}
+                    <div class="qx-slidenav-container qx-visible@s">
+                        <a class="qx-position-center-left qx-slidenav-previous qx-position-small qx-hidden-hover" href="#" qx-slidenav-previous qx-slideshow-item="previous"></a>
+                        <a class="qx-position-center-right qx-slidenav-next qx-position-small qx-hidden-hover" href="#" qx-slidenav-next qx-slideshow-item="next"></a>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if navigation != 'none' %}
+                {% if navigation == 'dot-inside' or navigation == 'dot-outside' %}
+                <div class="{{dotNavigationClass}}">
+                    <ul class="qx-dotnav">
+                    {% if fieldsGroup %}
+                        {% for index, fields in fieldsGroup %}
+                            {% set data = fieldsGroup(fieldsGroup, index) %}
+                            {% set title = data.title.value %}
+                            <li qx-slideshow-item="{{index}}">
+                                <a href="#">{title}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if navigation == 'thumb-inside' or navigation == 'thumb-outside' %}
+                <div class="{{thumbNavigationClass}}">
+                    <ul class="qx-thumbnav ">
+
+                    {% if fieldsGroup %}
+                        {% for index, fields in fieldsGroup %}
+                        {% set data = fieldsGroup(fieldsGroup, index) %}
+                        {% set slideThumb = data.thumb_image.value %}
+                        
+                        <li qx-slideshow-item="{{index}}">
+                            <a href="#">
+                                {% if slideThumb.media %}
+                                    {% if slideThumb.media.type == "svg" %}
+                                        {{ loadSvg(slideThumb.media.svg) }}
+                                    {% else %}
+                                        {{ image( slideThumb.media.image, title, '', '', true) }}
+                                    {% endif %}
+                                {% elseif slideThumb.url %}
+                                    {{ image(slideThumb.url, title, '', '', true) }}
+                                {% endif %}
+                            </a>
+                        </li>
+
+                        {% endfor %}
+                    {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endif %}
+
+            {# Start Bar Nav #}
+            {% if bar_navigation == true %}
+                    <div class="bar-navigation {{barNavPosClass}}">
+                        <ul class="qx-barnav {{bar_vertical ? 'qx-barnav-vertical' : 'qx-barnav-horizontal'}}" style="margin:0;padding:0;">
+                        {% if fieldsGroup %}
+                            {% for index, fields in fieldsGroup %}
+                                {% set data = fieldsGroup(fieldsGroup, index) %}
+                                {% set title = data.title.value %}
+                                <li qx-slideshow-item="{{index}}">
+                                    <a href="#">{title}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        </ul>                        
+                    </div>
+            {% endif %}            
+            {# End Bar Nav #}            
+        </div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

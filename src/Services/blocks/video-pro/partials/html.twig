@@ -1,0 +1,114 @@
+{% set id = field("id") %}
+{% set class = field('class') %}
+
+{% set link_type = field('link_type') %}
+{% set video_link = field('video_link') %}
+
+{% set controls = field('controls') %}
+{% set autoplay = field('autoplay') %}
+{% set mute = field('mute') %}
+{% set loop = field('loop') %}
+
+{# video options #}
+{% set src = field('custom_video') %}
+{% set videoPoster = field('video_poster') %}
+{% set videoId = "video-" ~ field('id') %}
+{% set tags = '  crossorigin ' %}
+
+{# Overlay #}
+{% set enable_overlay = field('enable_overlay') %}
+{% set ovImg = field('overlay_img') %}
+{% set playIcon = field('play_icon') %}
+{% set pIcon = field('upload_Picon') %}
+
+{% if controls %}
+    {% set tags = tags ~ 'controls ' %}
+{% endif %}
+{% if loop %}
+    {% set tags = tags ~ 'loop ' %}
+{% endif %}
+
+{% set option = '' %}
+{% if autoplay %}
+    {% set option = option ~ 'autoplay:true;' %}
+{% else %}
+    {% set option = option ~ 'autoplay:false;' %}
+{% endif %}
+{% if mute %}
+    {% set option = option ~'automute:true;' %}
+{% endif %}
+{% set tags = tags ~ 'data-qx-video="'~option~'"' %}
+
+{% set classes = classNames('qx-element qx-element-video-v2', visibilityClass(node.visibility), class) %}
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+    
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        {% if link_type == 'link' %}
+
+            {% if enable_overlay == true %}
+                {% if (ovImg.url or ovImg.media) %}
+                    <a href="#{{videoId}}" qx-toggle>  
+                        {% if ovImg.media %}
+                            {% if ovImg.media.type == "svg" %}
+                                {{ loadSvg(ovImg.media.svg) | raw }}
+                            {% else %}
+                                {{ image( ovImg.media.image, "") | link("#") }}
+                            {% endif %}  
+                        {% elseif ovImg.url %}
+                            {{ image(ovImg.url, "") | link("#") }}
+                        {% endif %}
+                    </a>
+                {% endif %}
+
+                {% if playIcon == true %}
+                    <div class="playIcon">
+                        <a href="#{{videoId}}" qx-toggle>
+                            {% if pIcon.media %}
+                                {% if pIcon.media.type == "svg" %}
+                                    {{ loadSvg(pIcon.media.svg) | raw }}
+                                {% else %}
+                                    {{ image( pIcon.media.image, alt_text, "") | link("") }}
+                                {% endif %}  
+                            {% elseif pIcon.url %}
+                                {{ image(pIcon.url, alt_text, "") | link("") }}
+                            {% endif %}                                          
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="playIcon">
+                        <a href="#{{videoId}}" qx-toggle>
+                            <i class="qxif-play-circle"></i>
+                        </a>
+                    </div>                                  
+                {% endif %}
+
+                <div id="{{videoId}}" class="qx-flex-top" data-qx-modal="bg-close: false">
+                    <div class="qx-modal-dialog qx-modal-body qx-width-auto">
+                        <button class="qx-modal-close-default" type="button" qx-close></button>
+                        {% set attr = 'iframe id="'~videoId~'" src="' ~ video_link ~ '"  class="qx-width-expand" frameborder="0" qx-video'~tags %}
+                        {{ wrapper(attr, 'iframe', false, false) }}{{ wrapper('iframe', 'iframe', false, true) }} 
+                    </div>
+                </div>                                                                   
+            {% else %}
+                {% set attr = 'iframe id="'~videoId~'" src="' ~ video_link ~ '" class="qx-width-expand" frameborder="0"'~tags %}
+                {{ wrapper(attr, 'iframe', false, false) }}{{ wrapper('iframe', 'iframe', false, true) }} 
+            {% endif %}             
+            
+        {% elseif link_type == 'custom' and src.media.type == "video" %}
+            {{ video( videoId, src.media.video, videoPoster.media.image, tags ) }}
+        {% else %}
+            <p class="qx-alert qx-alert-warning qx-m-0">Please select video first!</p>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

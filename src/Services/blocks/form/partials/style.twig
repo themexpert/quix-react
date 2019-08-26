@@ -1,0 +1,103 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+    formGroup = id + " .qx-form-group",
+    formGroupLabel = id + " .qx-form-group label:first-child",
+    formInput = id + " .qx-form-control",
+    formAllInput = id + " .form-wrapper .qx-form-control",
+    formText = id + " .form-text",
+    formCheck = id + " .qx-form-check .qx-form-check-input",
+    formCheckInline = id + " .qx-form-check.qx-form-check-inline .qx-form-check-input",
+    formSubmit = id + " .form-submit",
+    formSubmitButton = id + " .form-submit button",
+    submitSelector = id + " .form-submit",
+    img = {{ field("icon") | json_encode() }} ;
+
+// Submit Alignment
+
+
+// -----------------------------
+// form group
+// -----------------------------
+{# Common column gap #}
+style.css( formGroup, "padding-right", "calc( {{ field("column_gap").value ~ field("column_gap").unit }}/2 )" )
+style.css( formGroup, "padding-left", "calc( {{ field("column_gap").value ~ field("column_gap").unit }}/2 )" )
+
+{# width, grid elm.css( formGroup, 'width', {{ '100%' | json_encode() }}); #}
+{# style.css( formGroup + ',' + formSubmit, 'float', {{ 'left' | json_encode() }}); #}
+{# style.css( formGroup + ',' + formSubmit, 'width', {{ '100%' | json_encode() }}); #}
+
+{% set fieldsGroup = field('form_fields') %}
+{% set formID = field("id") %}
+{% if fieldsGroup %}
+    {% for index, fields in fieldsGroup %}
+        {% set data = fieldsGroup(fieldsGroup, index ) %}
+
+        {% set rawName = data.title.value|raw|lower|replace({'-': '', ' ': ''}) %}
+        {% set fieldid = [formID, index, rawName]|join %}
+
+        {% if data.type.value == 'textarea' %}
+            var heightTextarea = {{data.height.value|json_encode()|default("{value: '120', unit: 'px'}") }};
+            heightTextarea = typeof(heightTextarea) == 'object' ? heightTextarea : {value: heightTextarea, unit: 'px'};
+            style.css(formGroup + ".qx-form-group-{{ index }} textarea", 'height', heightTextarea.value + heightTextarea.unit);
+        {% endif %}
+
+      style.responsiveCss(formGroup + ".qx-form-group-{{ index }}", {{ data.column_width.value | json_encode() }}, 'width', {{ data.column_width.value.unit | json_encode() }});
+
+
+    {% endfor %}
+{% endif %}
+
+{# svg #}
+if( img.media ) {
+  if( img.media.type == "svg" ) {
+    style.css( submitSelector + " path", "fill", img.media.properties.color )
+    style.css( submitSelector + " svg", 'width', img.media.properties.size.value +  img.media.properties.size.unit)
+    style.css( submitSelector + " svg", 'height', img.media.properties.size.value +  img.media.properties.size.unit)
+    style.css( submitSelector + " svg," + submitSelector + " i", 'margin-right', '10px')
+
+    style.css( submitSelector + " i", 'color', img.media.properties.color)
+    style.css( submitSelector + " i", 'font-size', img.media.properties.size.value +  img.media.properties.size.unit)
+  }
+}
+{# for all input of the form #}
+{# style.css( ".qx.quix .qx-element.qx-element-form-v2 input, .app-mount .qx-element.qx-element-form-v2 input", 'height', 'auto'); #}
+
+
+{# form #}
+style.responsiveCss(formGroup, {{ field("rows_gap") | json_encode() }}, 'margin-bottom', {{ field("rows_gap").unit | json_encode() }});
+
+{# label #}
+style.css( formGroupLabel, 'font-size', '20px' );
+style.css( formGroupLabel, 'color', {{ field('label_color') | json_encode() }});
+style.typography(formGroupLabel, {{ field('label_typography') | json_encode() }});
+style.responsiveCss(formGroupLabel, {{ field("label_spacing") | json_encode() }}, 'margin-bottom', {{ field("label_spacing").unit | json_encode() }});
+
+{# form input #}
+style.css( formAllInput, 'min-height', '38px');
+style.css( formAllInput, 'font-size', '16px' );
+style.css( formAllInput, 'color', {{ field('field_color') | json_encode() }});
+style.css( formAllInput, 'background-color', {{ field('field_bgcolor') | json_encode() }});
+style.css( formAllInput, 'border-color', {{ field('field_bordercolor') | json_encode() }});
+style.typography(formAllInput, {{ field('field_typography') | json_encode() }});
+style.responsiveCss(formAllInput, {{ field("field_borderwidth") | json_encode() }}, 'border-width', {{ field("field_borderwidth").unit | json_encode() }});
+style.padding(formAllInput, {{ field('field_padding') | json_encode() }})
+{# radio and checkbox #}
+style.css( formCheck, 'margin-left', '-20px');
+style.css( formCheckInline, 'margin-left', '0px');
+
+{# form submit #}
+style.responsiveCss(id + " .form-submit", {{ field('submit_column') | json_encode() }}, 'width', {{ field('submit_column').unit | json_encode() }});
+style.css(id + " .form-submit .qx-btn-block span", 'justify-content', "{{ field('submit_block_alignment').value }}");
+
+style.alignment(submitSelector, {{ field('submit_alignment') | json_encode() }});
+style.css( submitSelector + ' button', 'color', {{ field('button_color') | json_encode() }});
+style.css( submitSelector + ' button:hover', 'color', {{ field('button_hover_color') | json_encode() }});
+style.background (submitSelector + ' button', {{ field("button_bg") | json_encode() }})
+style.border(submitSelector + ' button', {{ field("button_border") | json_encode() }} )
+style.padding(submitSelector + ' button', {{ field('button_padding') | json_encode() }})
+style.typography(submitSelector + ' button', {{ field('button_typography') | json_encode() }});
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

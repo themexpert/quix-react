@@ -1,0 +1,53 @@
+
+{% set id = field('id') %}
+{% set class = field('class') %}
+{% set type = field('type') %}
+{% set location = field('location') %}
+{% set coordinates = field('coordinates') %}
+{% set coordinates_label = field('coordinates_label') %}
+{% set views = field('views') %}
+{% set q = location | url_encode %}
+{% set label = location %}
+{% set lat = field('latitude')|default('23.77319') %}
+{% set lon = field('longitude')|default('90.36692') %}
+
+{% set height = field('height') %}
+{% if height.value %}
+    {% set height = height.value %}
+{% endif %}
+
+{% set classes = classNames('qx-element qx-element-map', visibilityClass(node.visibility), class ) %}
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+    
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        <div class="open-map-container">
+            
+            <iframe
+                id="openMaps-{{id}}" 
+                height={{height}}
+                width="100%"
+                frameborder="0" 
+                scrolling="no" 
+                marginheight="0" 
+                marginwidth="0" 
+                src="https://www.openstreetmap.org/export/embed.html?bbox={{lon}}%2C{{lat}}%2C{{lon}}%2C{{lat}}&amp;layer={{views}}"marker="{{lat}}%2C{{lon}}"
+                >
+            </iframe>
+            <br/>
+            <small>
+                <a href="https://www.openstreetmap.org/#map=12/{{lat}}/{{lon}}&amp;layers=C" target="_blank">View Larger Map</a>
+            </small>
+        </div>
+    {% endblock %}
+{% endembed %}

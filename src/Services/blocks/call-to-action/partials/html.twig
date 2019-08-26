@@ -1,0 +1,116 @@
+{% set id = field("id") %}
+{% set class = field("class") %}
+{% set element_mode = field('element_mode') %}
+
+{# Image postion #}
+{% set image_position = field('image_position') %}
+{% set src = field('image') %}
+{% set alt_text = field('alt_text') %}
+{# content #}
+{% set graphics_src = field('graphics_image') %}
+{% set title = field('title') %}
+{% set tag = field('title_html_tag') %}
+{% set subtitle = field('subtitle') %}
+{% set subtitle_tag = field('html_subtitle_tag') %}
+{% set description = field('description') %}
+{# button #}
+{% set button = field('button') %}
+{% set link = field('link') %}
+{% set btn_class = 'qx-btn qx-btn-' ~ field('button_type') %}
+{# Wrapper Class #}
+{% set wrapperClassesForCallToAction = classNames('qx-element-call-to-action__wrapper qx-animation-toggle',
+field('element_mode') ? field('element_mode') ~ '-mode': '',
+{
+  'qx-d-md-flex qx-flex-md-row' : image_position.value == 'left',
+  'qx-d-md-flex qx-flex-md-row-reverse' : image_position.value == 'right',
+  'qx-d-md-flex qx-flex-md-column-reverse' : image_position.value == 'down'
+}) %}
+{# Content Class  #}
+{% set contentClassesForCallToAction = classNames('qx-element-call-to-action__content',
+  field('vertical_position').value ? field('vertical_position').value ~ ' qx-d-flex qx-flex-column': '',
+{
+  'qx-d-flex qx-flex-column' : (field('height') == 'custom'),
+}) %}
+{% set ctaAnimationClass = (field("content_hover_animation_effect") is not empty) ? "qx-animation-" ~ field("content_hover_animation_effect") : "" %}
+
+{% set classes = classNames('qx-element qx-element-call-to-action-v2', visibilityClass(node.visibility), class) %}
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+  
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+      {# Call to action Markup start #}
+      <div class="{{ wrapperClassesForCallToAction }}">
+        {# call-to-action image #}
+        {% if element_mode == "classic" %}
+          {% if src.media or src.url %}
+          <figure class="qx-element-call-to-action__image">
+            {% if src.media %}
+              {% if src.media.type == "svg" %}
+                {{ loadSvg(src.media.svg) | raw }}
+              {% else %}
+                {{ image( src.media.image, alt_text) | link(link) }}
+              {% endif %}
+            {% elseif src.url %}
+                {{ image(src.url, alt_text) | link(link) }}
+            {% endif %}
+          </figure>
+          {% endif %}
+        {% endif %}
+
+        <div class="{{ contentClassesForCallToAction }}" >
+          {% if graphics_src.media or graphics_src.url %}
+          <figure class="qx-element-call-to-action__graphics">
+            {% if graphics_src.media %}
+              {% if graphics_src.media.type == "svg" %}
+                {{ loadSvg(graphics_src.media.svg) | raw }}
+              {% else %}
+                {{ image( graphics_src.media.image, alt_text) | link(link) }}
+              {% endif %}
+            {% elseif graphics_src.url %}
+                {{ image(graphics_src.url, alt_text) | link(link) }}
+            {% endif %}
+          </figure>
+          {% endif %}
+          {# call-to-action title #}
+          {% if title %}
+            <div class="qx-element-call-to-action__title">
+              {{title | wrap(tag) }}
+            </div>
+          {% endif %}
+
+          {# call-to-action subtitle #}
+          {% if subtitle %}
+            <div class="qx-element-call-to-action__subtitle">
+              {{subtitle | wrap(subtitle_tag)}}
+            </div>
+          {% endif %}
+
+          {# call-to-action content #}
+          {% if description %}
+            <div class="qx-element-call-to-action__description">
+              {{field('description')|raw}}
+            </div>
+          {% endif %}
+
+          {# call-to-action button #}
+          {% if button %}
+            <div class="qx-element-call-to-action__button">
+              {{ field('button') | link( link, btn_class ) }}
+            </div>
+          {% endif %}
+
+        </div>
+
+      </div>
+  {% endblock %}
+{% endembed %}

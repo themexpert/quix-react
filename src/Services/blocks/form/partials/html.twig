@@ -1,0 +1,113 @@
+{% if renderer %}
+    {% import "elements/form/partials/macro.html" as forms %}
+{% else %}
+    {% import _self as forms %}
+{% endif %}
+
+{% set dataAll = allfield() %}
+{% set key = captchaPublicKey() %}
+
+{% set id = field("id") %}
+{% set name = field("formname") %}
+{% set class = field("class") %}
+{% set fieldsGroup = field('form_fields') %}
+{% set classes = classNames('qx-element qx-element-form-v2', visibilityClass(node.visibility), class) %}
+
+{% set requiredmark = field("required-mark") %}
+{% set requiredrecaptcha = field("required-recaptcha") %}
+{% set rechaptchaTitle = field("rechaptcha_title") %}
+{% set rechaptchaPlaceholder = field("rechaptcha_placeholder") %}
+{% set rechaptchaType = field("recaptcha_type") %}
+{% set rechaptchaId = "recaptchaCallback" ~ field('id') %}
+{% set label = field("label") %}
+{% set size = field("size") %}
+
+{% set submit_text = field("submit_text") %}
+{% set submit_size = field("submit_size") %}
+{% set submit_block = field("submit_block")|default(false) %}
+{% set submit_column = field("submit_column") %}
+{% set submit_alignment = field("submit_alignment") %}
+{% set icon = field("icon") %}
+
+{# dont change serial, only you can add after #}
+{% set submitInfo = [submit_text, submit_size, submit_column, submit_alignment, icon, submit_block, requiredrecaptcha] %}
+
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+    
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        <div class="{{ id }}-wrapper form-wrapper qx-clearfix">
+            {% if fieldsGroup %}
+                {{ wrapper('formTag', 'form', false, false) }}
+                    <div class="form-fields-wrapper">
+                        {% for index, fields in fieldsGroup %}
+
+                            {% set data = fieldsGroup(fieldsGroup, index ) %}
+                            {% set attributes = [label, size, requiredmark] %}
+
+                            {{ forms.getInput(index, id, attributes, data) }}
+                           
+                        {% endfor %}
+
+                        {% if requiredrecaptcha %}
+                            <div id="qx-form-captcha" class="qx-form-group qx-form-group-captcha">
+                            {% if renderer %}
+                                {% if rechaptchaTitle %}
+                                    <label for="qx-form-captcha-field">{{rechaptchaTitle|default('Captcha')}}</label>
+                                {% endif %}
+
+                                {% if rechaptchaType != "math" %}
+                                    <div id="{{ id }}-captcha" class="g-recaptcha qx-d-block" data-callback="{{ rechaptchaId }}" data-sitekey="{{ key }}" data-theme="light"></div>
+                                    {% set captchaNotice = validateJoomlaCaptcha(rechaptchaType) %}
+                                    {% if captchaNotice == false %}
+                                        <div class="qx-alert qx-alert-danger">
+                                            Joomla! recaptcha_invisible is not setup properly or disabled. Please Follow <a href='https://www.themexpert.com/docs/quix-builder/captcha-recaptcha-guide' target='_blank'>the link</a> for details to fix it.
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="qx-text-center qx-inline qx-dark">
+                                        <canvas id="{{id}}-first" data-id="{{ (session.quix_recaptcha.first_number+5) }}"></canvas>
+
+                                        <div id="captcha-expire" class="qx-d-none qx-overlay-default qx-position-cover">
+                                            <div class="qx-position-center">
+                                                <span class="qx-margin-small-right qx-icon" qx-icon="close">
+                                                    <svg width="100" height="100" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="close"><path fill="none" stroke="gray" stroke-width="0.5" d="M16,16 L4,4"></path><path fill="none" stroke="gray" stroke-width="0.5" d="M16,4 L4,16"></path></svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <canvas class="qx-d-none" id="{{id}}-second" data-id="{{ (session.quix_recaptcha.second_number+11) }}"></canvas>
+
+                                    <input type="text" name="jform[recaptcha_value]" class="qx-form-control qx-form-control-md" id="qx-form-captcha-input" aria-describedby="captcha" placeholder="{{rechaptchaPlaceholder|default('Write the result')}}" required="true" />
+
+                                {% endif %}
+                            {% else %}
+                                <div class="g-chaptcha-placeholder">Captcha will show on preview page</div>
+                            {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {{ forms.getSubmit( id, submitInfo, rechaptchaType != "math" ) }}
+                        
+                        <div class="qx-form-group">
+                            <div id="form-element-msg"></div>
+                        </div>
+
+                        {{ formFooter('form', dataAll) }}
+                    </div>
+                {{ wrapper('formTag', 'form', false, true) }}
+            {% endif %}
+        </div>
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,289 @@
+name: Gallery
+slug: gallery
+groups: pro
+form:
+  general:
+    
+    - name : images
+      label: Images
+      type: group-repeater
+      schema:
+        - name: title
+          value: Sample Image
+
+        - name: image
+          type: media
+          filters: image
+          value: 'libraries/quix/assets/images/placeholder.png'
+        
+        - name: alt_text
+          label : Alt Text
+          type: text
+          help : Google focuses on alt text when trying to understand what an image is about. So it's valuable for SEO, in addition to being useful for users.
+          depends:
+            image: '*'
+
+        - name: caption
+          type: text 
+          depends:
+            image: '*'
+
+        - name: tag
+          type: text
+          help: Use comma to add more tags
+
+      value:
+        - title : Item 1
+          image: 'libraries/quix/assets/images/placeholder.png'
+          caption: Item 1
+        - title : Item 2
+          image: 'libraries/quix/assets/images/placeholder.png'
+          caption: Item 2
+        - title : Item 3
+          image: 'libraries/quix/assets/images/placeholder.png'
+          caption: Item 3
+        - title : Item 4
+          image: 'libraries/quix/assets/images/placeholder.png'
+          caption: Item 4
+            
+    - name    : gallery_fg_columns
+      label   : Columns
+      type    : fields-group
+      status  : open
+      schema  :
+        - name : standard_grid
+          label: Standard Grid
+          type : select
+          value: qx-grid-medium
+          options:
+            qx-grid-large : Large
+            qx-grid-medium : Medium
+            qx-grid-small : Small
+            qx-grid-stack : Stack
+            qx-grid-collapse : Collapse
+
+        - name : gallery_alignment
+          label: Gallery Alignment
+          type: select
+          value: qx-flex-center
+          options:
+            qx-flex-left : Left
+            qx-flex-center : Center
+            qx-flex-right : Right
+            qx-flex-space-between : Between
+            qx-flex-space-around : Around
+
+        - name : column
+          label: Column
+          type : select
+          value: 4
+          options:
+            1 : 1
+            2 : 2
+            3 : 3
+            4 : 4
+            5 : 5
+            6 : 6
+
+    - name    : gallery_fg_filter
+      label   : Filter
+      type    : fields-group
+      schema  :
+        - name : show_filter
+          label: Enable Filter Navigation
+          type: switch
+          value: false
+        
+        - name : show_filter_all
+          label: Show Filter All
+          type: switch
+          value: true
+        
+        - name : filter_all_text
+          label: Label For Filter All
+          type : text
+          value: All
+
+        - name : default_filter
+          label: Default Filter
+          help: Which tag should be selected by default
+          type : text
+
+        - name : filter_alignment
+          label: Filter Alignment
+          type: select
+          value: qx-flex-center
+          options:
+            qx-flex-left : Left
+            qx-flex-center : Center
+            qx-flex-right : Right
+            qx-flex-space-between : Between
+            qx-flex-space-around : Around
+    
+    - name    : gallery_fg_lightbox
+      label   : Lightbox
+      type    : fields-group
+      schema  :
+        - name : lightbox
+          label: Enable Lightbox Gallery
+          type : switch
+          value: true
+
+        - name : lightbox-style
+          label: Lightbox Style
+          type : select
+          value: slide
+          options:
+            slide : Slide
+            fade : Fade
+            scale : Scale
+        
+        - name : caption
+          label: Show Caption In Lightbox
+          type : switch
+          value: true
+
+    - name    : gallery_fg_image
+      label   : Image
+      type    : fields-group
+      schema  :
+        - name : image_fit
+          label: Image Adjustment
+          type : select
+          value: cover
+          options:
+            contain : Large
+            cover : Cover
+            fill : Fill
+            inherit : Inherit
+            initial : Initial
+            none : None
+            scale-down : Scale-down
+            unset : Unset
+
+        - name : image_position
+          label: Image Position
+          type : select
+          value: center
+          options:
+            inherit : Inherit
+            initial : Initial
+            top : Top
+            center : Center
+            bottom : Bottom
+            left : Left
+            right : Right
+            unser : Unset
+
+    - name    : gallery_fg_image
+      label   : Overlay
+      type    : fields-group
+      schema  :
+        - name : show_overlay
+          label: Show Overlay
+          type : switch
+          value: false
+
+        - name : show_overlay_title
+          label: Show Title
+          type : switch
+          value: false
+
+        - name : show_overlay_caption
+          label: Show Caption
+          type : switch
+          value: false
+
+        - name : show_overlay_onlyhover
+          label: Show on hover
+          type : switch
+          value: false
+
+        - name : overlay_style
+          label: Overlay Style
+          type : select
+          value: default
+          options:
+            default : Default
+            primary : Primary
+            none : none
+
+        - name : overlay_position
+          type : select
+          value: qx-position-center
+          options:
+            qx-position-center : Center
+            qx-position-top : Top
+            # qx-position-left : Left
+            # qx-position-right : Right
+            qx-position-bottom : Bottom
+
+
+  styles:
+    - name    : image_style
+      label   : Image
+      type    : fields-group
+      status  : open
+      schema  : 
+        - name  : image_width
+          label : Image Width
+          type: slider
+          defaultUnit: %
+          units : %
+          max : 100
+          value: 
+            desktop : 100
+            tablet : 100
+            phone : 100
+
+        - name  : image_height
+          label : Image height
+          type: slider
+          defaultUnit: %
+          max : 2000
+          value: 
+            desktop : 100
+            tablet : 100
+            phone : 100
+
+        - name : image_border
+          label : Border
+          type: border
+    
+    - name    : overlay_style
+      label   : Overlay
+      type    : fields-group
+      status  : open
+      schema  : 
+        - name: overlay_alignment
+          label: Alignment
+          type: select
+          value: center
+          options:
+            qx-text-left: Left
+            qx-text-center: Center
+            qx-text-right: Right
+
+        - name: overlay_title_style_d
+          label: Title Style
+          type: divider
+        
+        - name: overlay_title_style
+          type: typography
+          units: %, px, rem
+
+        - name: overlay_caption_style_d
+          label: Caption Style
+          type: divider
+
+        - name: overlay_caption_style
+          type: typography
+          units: %, px, rem
+
+        - name: overlay_bg_d
+          label: Overlay Background
+          type: divider
+
+        - name: overlay_bg
+          type: background
+

@@ -1,0 +1,28 @@
+{% include 'global.twig' %}
+
+var style = Object.assign({}, Assets), 
+            id = "#{{ field("id") }}",
+            overlayTitle = "#{{ field("id") }} .qx-gallery-media-wrapper li .qx-overlay .qx-gallery-title",
+            overlayCaption = "#{{ field("id") }} .qx-gallery-media-wrapper li .qx-overlay .qx-gallery-caption",
+            overlayWrapper = "#{{ field("id") }} .qx-gallery-media-wrapper li .qx-overlay";
+
+style.css(id + " .qx-element-gallery__wrapper a", "display", "block" )
+
+style.width(id + " figure.qx-element-gallery__media img", {{ field("image_width") | json_encode() }})
+style.height(id + " figure.qx-element-gallery__media img", {{ field("image_height") | json_encode() }})
+style.css (id + " figure.qx-element-gallery__media", 'overflow', 'hidden')
+style.css (id + " figure.qx-element-gallery__media", 'display', 'block')
+style.border (id + " figure.qx-element-gallery__media", {{ field("image_border") | json_encode() }})
+
+{# // image adjustment #}
+style.css (id + " figure.qx-element-gallery__media img", 'object-position', "{{ field("image_position") }}")
+style.css (id + " figure.qx-element-gallery__media img", 'object-fit', "{{ field("image_fit") }}")
+
+{# // Overlay #}
+style.background (overlayWrapper, {{ field("overlay_bg") | json_encode() }})
+style.typography (overlayTitle, {{ field('overlay_title_style') | json_encode() }})
+style.typography (overlayCaption, {{ field('overlay_caption_style') | json_encode() }})
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

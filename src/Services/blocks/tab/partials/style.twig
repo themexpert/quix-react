@@ -1,0 +1,134 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+    icon = {{ field("global_icon") | json_encode() }},
+    verticalTabWrapper = id + " .qx-tab-vertical",
+    verticalTabSelector = id + " .qx-tab-leftside.qx-tab",
+    tabSelector = id + " .qx-tab",
+
+    horizontalTabItemSelector = id + " .qx-tab-horizontal .qx-element-tab-item",
+    verticalTabItemSelector = id + " .qx-tab-vertical .qx-element-tab-item",
+    verticalTabActiveItemSelector = id + " .qx-tab-vertical .qx-active.qx-element-tab-item",
+
+    tabItemSelector = id + " .qx-tab-horizontal .qx-element-tab-item",
+    activeTabItemSelector = id + " .qx-tab-horizontal .qx-active.qx-element-tab-item",
+
+    iconSelector = id + " .qx-tab_icon",
+    activeIconSelector = id + " .qx-active .qx-tab_icon",
+    titleSelectorWrapper = id + " .qx-tab-title",
+    horizontalTitleSelectorWrapper = id + " .qx-tab-horizontal .qx-tab-title",
+    activeTitleSelectorWrapper = id + " .qx-active .qx-tab-title",
+
+    contentWrapperSelector  = id + " .qx-switcher",
+    contentVerticalWrapperSelector  = id + " .qx-tab-vertical .qx-switcher",
+    contentSelector  = id + " .qx-tab-content";
+
+{# tab #}
+style.css(tabSelector, 'margin-left', '0px' )
+style.css(tabSelector, 'margin-bottom', '0px' )
+style.css(verticalTabWrapper, 'display', 'grid' )
+style.css(verticalTabWrapper, 'grid-template-columns', '0.7fr 2fr' )
+style.phone( verticalTabWrapper, style._prop('grid-template-columns', '1fr 2fr'))
+style.css(verticalTabWrapper + ' .qx-tab-content', 'height', '100%' )
+style.css(verticalTabWrapper + ' .qx-element-tab-item', 'border-right-style', 'solid' )
+style.css(horizontalTabItemSelector, 'border-bottom-style', 'solid' )
+
+{# tab Item #}
+style.css(tabItemSelector, 'padding-left', '0px' )
+style.css(tabItemSelector + ':focus', 'outline', 'none' )
+style.css(tabItemSelector + ' *:focus', 'outline', 'none' )
+style.css(tabItemSelector, 'border-bottom-color', 'transparent' )
+style.responsiveCss(tabItemSelector, {{ field("item_border_width") | json_encode() }}, 'border-width', {{ field("item_border_width").unit | json_encode() }});
+style.responsiveCss(activeTabItemSelector, {{ field("item_border_width") | json_encode() }}, 'border-width', {{ field("item_border_width").unit | json_encode() }});
+style.css(activeTabItemSelector + ' , '+ contentWrapperSelector, 'border-color', {{ field("tab_border_color") | json_encode() }} )
+
+style.css(verticalTabItemSelector, 'width', '100%' )
+style.css(verticalTabItemSelector, 'border-color', 'transparent' )
+style.responsiveCss(verticalTabItemSelector + ' ,' + verticalTabActiveItemSelector, {{ field("item_border_width") | json_encode() }}, 'border-width', {{ field("item_border_width").unit | json_encode() }});
+style.css(verticalTabActiveItemSelector, 'border-color', {{ field("tab_border_color") | json_encode() }} )
+
+
+style.css(titleSelectorWrapper + ' *', 'color', {{ field("title_color") | json_encode() }})
+style.css(titleSelectorWrapper, 'background-color', {{ field("title_bg_color") | json_encode() }})
+style.padding(titleSelectorWrapper, {{ field('title_padding') | json_encode() }})
+style.typography( titleSelectorWrapper + ' *', {{ field('title_font') | json_encode() }});
+style.css(activeTitleSelectorWrapper + ' *', 'color', {{ field("title_active_color") | json_encode() }})
+style.css(activeTitleSelectorWrapper, 'background-color', {{ field("title_active_bg_color") | json_encode() }})
+
+style.css(titleSelectorWrapper, 'display', "flex")
+style.css(titleSelectorWrapper, 'align-items', "center")
+
+{# content #}
+style.css(contentSelector, 'margin-top', '0px')
+style.css(contentSelector, 'color', {{ field("content_color") | json_encode() }})
+style.css(contentSelector, 'background-color', {{ field("tab_bg_color") | json_encode() }})
+style.padding(contentSelector, {{ field('content_padding') | json_encode() }})
+style.typography( contentSelector, {{ field('content_font') | json_encode() }});
+style.responsiveCss(contentWrapperSelector, '-'+{{ field("icon_spacing") | json_encode() }}, 'margin-top', {{ field("icon_spacing").unit | json_encode() }});
+
+{# Horizontal style #}
+style.css(contentWrapperSelector, 'border-bottom', 'none' )
+style.css(contentVerticalWrapperSelector, 'border-bottom', 'none' )
+{# {% if field('tab_alignment') == 'horizontal' %} #}
+    style.css(contentWrapperSelector, 'border-top-style', 'solid' );
+    style.responsiveCss(contentWrapperSelector, {{ field("item_border_width") | json_encode() }}, 'border-top-width', {{ field("item_border_width").unit | json_encode() }});
+{# {% else %} #}
+    style.css(contentVerticalWrapperSelector, 'border-top', 'none' )
+    style.css(contentVerticalWrapperSelector, 'border-left-style', 'solid' );
+    style.responsiveCss(contentVerticalWrapperSelector, {{ field("item_border_width") | json_encode() }}, 'border-left-width', {{ field("item_border_width").unit | json_encode() }});
+{# {% endif %} #}
+
+// tab items style
+{% set fieldsGroup = field('tab_fg_element_mode') %}
+{% if fieldsGroup %}
+    {% for index, fields in fieldsGroup %}
+        {% set data = fieldsGroup(fieldsGroup, index) %}
+        {% set src = data.image.value | json_encode() %}
+        {# {% set img_width = data.img_width.value | json_encode() %} #}
+        var src = {{ src }};
+        if(src.media){
+            if (src.media.type == "svg"){
+                style.css( "#{{ field("id") }} li.qx-tab-content.item{{ index }} svg path", "fill", src.media.properties.color )
+                style.css( "#{{ field("id") }} li.qx-tab-content.item{{ index }} svg", 'width', src.media.properties.size.value + src.media.properties.size.unit)
+                style.css( "#{{ field("id") }} li.qx-tab-content.item{{ index }} svg", 'height', src.media.properties.size.value +  src.media.properties.size.unit)
+
+                style.css( "#{{ field("id") }} li.qx-tab-content.item{{ index }} i", 'color', src.media.properties.color)
+                style.css( "#{{ field("id") }} li.qx-tab-content.item{{ index }} i", 'font-size', src.media.properties.size.value +  src.media.properties.size.unit)
+            }
+            else
+            {
+                style.css("#{{ field("id") }} li.qx-tab-content.item{{ index }} figure img", 'width',"{{ data.img_width.value.value ~ data.img_width.value.unit }}")
+            }
+        }
+    {% endfor %}
+{% endif %}
+
+style.css("#{{ field("id") }} li.qx-tab-content figure img", 'width', "120px")
+
+{# icon #}
+style.css(iconSelector, 'display', 'flex')
+style.css(activeIconSelector + ' path', 'fill', {{ field('icon_active_color') | json_encode() }})
+style.responsiveCss(iconSelector, {{ field("icon_spacing") | json_encode() }}, 'margin-right', {{ field("icon_spacing").unit | json_encode() }});
+
+if( icon.media ) {
+  if( icon.media.type == "svg" ) {
+    style.css( iconSelector + " path", "fill", icon.media.properties.color )
+    style.css( iconSelector + " svg", 'width', icon.media.properties.size.value +  icon.media.properties.size.unit)
+    style.css( iconSelector + " svg", 'height', icon.media.properties.size.value +  icon.media.properties.size.unit)
+
+    style.css( iconSelector + " i", 'color', icon.media.properties.color)
+    style.css( iconSelector + " i", 'font-size', icon.media.properties.size.value +  icon.media.properties.size.unit)
+  }
+}
+
+{% if field('media_position') %}
+    style.css( contentSelector + " .qx-media", "display", "block" )
+    style.css( contentSelector + " figure", 'text-align', "{{ field("image_alignment").value }}");
+{% else %}
+    {# style.css( contentSelector + " figure", "flex", '1' ) #}
+    style.css( contentSelector + " .qx-media-body", "flex", '2' )
+{% endif %}
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

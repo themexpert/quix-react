@@ -1,0 +1,133 @@
+{% include 'global.twig' %}
+
+
+ var id = "#{{ field("id") }}",
+    element_mode = "{{ field("element_mode") }}",
+    background_effect = "{{ field("bg_hover_animation") }}",
+    graphics_src = {{ field("graphics_image") | json_encode() }} ,
+    coverMode = id + " .qx-element-call-to-action__wrapper.cover-mode ",
+    classicMode = id + " .qx-element-call-to-action__wrapper.classic-mode ",
+
+    elementSelector = id + " .qx-element-call-to-action__wrapper",
+    contentSelector = id + " .qx-element-call-to-action__content",
+    flexSelector = id + " .qx-element-call-to-action__image," + id + " .qx-element-call-to-action__content " ,
+    imageSelector = id + " .qx-element-call-to-action__image",
+    graphicsSelector = id + " .qx-element-call-to-action__graphics",
+    titleSelector = id + " .qx-element-call-to-action__title",
+    subtitleSelector = id + " .qx-element-call-to-action__subtitle",
+    descriptionSelector = id + " .qx-element-call-to-action__description",
+    buttonSelector = id + " .qx-element-call-to-action__button";
+
+if(element_mode == 'cover'){
+  var coverImage = {{ field("image") | json_encode() }};
+  if(coverImage.media){
+    if(coverImage.media.image){
+      {% set imageUrl = imageUrl(field("image").media.image) %}
+      style.css (elementSelector, 'background-image', 'url({{ imageUrl }})' )
+    }else{
+      {% set imageUrl = imageUrl( field("image").url ) %}
+      style.css (elementSelector, 'background-image', 'url({{ imageUrl }})' )
+    }
+  }else if(coverImage.url){
+    {% set imageUrl = imageUrl( field("image").url ) %}
+    style.css (elementSelector, 'background-image', 'url({{ imageUrl }})' )
+  }
+  style.css(elementSelector, 'transition', 'all 0.5s ease')
+  style.css( elementSelector, 'background-color', {{ field('background_overlay_color') | json_encode() }});
+  style.css( elementSelector + ':hover' , 'background-color', {{ field('background_overlay_hover_color') | json_encode() }});
+  {# style.css (elementSelector, 'background-image', 'url('+ FILE_MANAGER_ROOT_URL + {{ field('image').media.image | json_encode() }} + ')' ) #}
+  style.css(elementSelector, 'background-size', 'cover')
+  style.css(elementSelector, 'background-repeat', 'no-repeat')
+  style.css(elementSelector , 'background-blend-mode', {{ field('bg_blend_mode') | json_encode() }});
+  style.css(elementSelector + ':hover' , 'background-blend-mode', {{ field('bg_blend_mode_hover') | json_encode() }});
+}
+{# Element style #}
+var heightType = {{ field('height') | json_encode() }}
+if( heightType == 'custom' ){
+  style.minHeight(contentSelector, {{ field('element_min_height') | json_encode() }})
+}
+style.alignment( contentSelector, {{ field('element_alignment') | json_encode() }} );
+style.css( contentSelector , 'padding', '0px ' );
+style.css( id + ' .cover-mode .qx-element-call-to-action__content' , 'padding', '100px ' );
+style.padding( classicMode + ' .qx-element-call-to-action__content', {{ field("element_padding") | json_encode() }})
+style.padding( coverMode + ' .qx-element-call-to-action__content', {{ field("element_padding") | json_encode() }})
+
+{# image #}
+var minWidth = {{ field('image_width') | json_encode() }}.desktop
+if( ! minWidth ){
+  style.css( flexSelector , 'min-width', '50%' );
+}else{
+  style.css( flexSelector , 'width', '100%' );
+}
+var imageMinHeight = {{ field('image_min_height') | json_encode() }}
+style.css( flexSelector , 'margin-bottom', '0' );
+style.css( imageSelector + ' img' , 'min-height', '100%' );
+style.css( imageSelector + ' img' , 'object-fit', 'cover' );
+style.width( imageSelector + ' img' , {{ field("image_width") | json_encode() }}, '%');
+style.minHeight( imageSelector + ' img', {{ field('image_min_height') | json_encode() }})
+style.alignment( imageSelector, {{ field('image_alignment') | json_encode() }} );
+
+
+{# graphics image and icon #}
+style.width(graphicsSelector + ' *', {{ field("graphics_width") | json_encode() }}, '%');
+style.borderRadius(graphicsSelector + ' *', {{ field("graphics_border_radius") | json_encode() }});
+style.responsiveCss(graphicsSelector, {{ field("graphics_spacing") | json_encode() }}, 'margin-bottom', 'px');
+{# svg #}
+if( graphics_src.media ) {
+  if( graphics_src.media.type == "svg" ) {
+    style.css( graphicsSelector + " path", "fill", graphics_src.media.properties.color )
+    style.css( graphicsSelector + " svg", 'width', graphics_src.media.properties.size.value +  graphics_src.media.properties.size.unit)
+    style.css( graphicsSelector + " svg", 'height', graphics_src.media.properties.size.value +  graphics_src.media.properties.size.unit)
+
+    style.css( graphicsSelector + " i", 'color', graphics_src.media.properties.color)
+    style.css( graphicsSelector + " i", 'font-size', graphics_src.media.properties.size.value +  graphics_src.media.properties.size.unit)
+  }
+}
+
+{# title Style #}
+style.css( titleSelector + ' *', 'color', {{ field('title_color') | json_encode() }});
+style.css( elementSelector + ':hover .qx-element-call-to-action__title *', 'color', {{ field('title_hover_color') | json_encode() }});
+style.responsiveCss( titleSelector + ' *', {{ field("title_spacing") | json_encode() }}, 'margin-bottom', 'px');
+style.typography( titleSelector + ' *', {{ field('title_font') | json_encode() }});
+
+{# subtitle Style #}
+style.css( subtitleSelector + ' *', 'color', {{ field('subtitle_color') | json_encode() }});
+style.css( elementSelector + ':hover .qx-element-call-to-action__subtitle *', 'color', {{ field('subtitle_hover_color') | json_encode() }});
+style.responsiveCss( subtitleSelector + ' *' , {{ field("subtitle_spacing") | json_encode() }}, 'margin-bottom', 'px');
+style.typography( subtitleSelector + ' *', {{ field('subtitle_font') | json_encode() }});
+
+{# Description Style #}
+style.css( descriptionSelector , 'color', {{ field('description_color') | json_encode() }});
+style.css( elementSelector + ':hover .qx-element-call-to-action__description' , 'color', {{ field('description_hover_color') | json_encode() }});
+style.responsiveCss( descriptionSelector , {{ field("description_spacing") | json_encode() }}, 'margin-bottom', 'px');
+style.typography( descriptionSelector + ' , ' + descriptionSelector + ' *' , {{ field('description_font') | json_encode() }});
+
+{# button #}
+style.css( buttonSelector + ' *', 'color', {{ field('button_text_color') | json_encode() }});
+style.css( buttonSelector + ' *:hover', 'color', {{ field('button_hover_text_color') | json_encode() }});
+{# style.css( buttonSelector + ' *', 'background-color', {{ field('button_text_color') | json_encode() }}); #}
+style.background (buttonSelector + ' .qx-btn', {{ field("button_bg") | json_encode() }})
+style.css( buttonSelector + ' *', 'border-style', 'solid');
+style.css( buttonSelector + ' *', 'border-color', {{ field('button_border_color') | json_encode() }} );
+style.css( buttonSelector + ' *:hover', 'border-color', {{ field('button_hover_border_color') | json_encode() }} );
+style.responsiveCss( buttonSelector + ' *', {{ field('button_border_width') | json_encode() }}, 'border-width', 'px');
+style.responsiveCss( buttonSelector + ' *', {{ field('button_border_radius') | json_encode() }}, 'border-radius', 'px');
+style.typography( buttonSelector + ' *' , {{ field('button_font') | json_encode() }});
+style.padding( buttonSelector + ' a ', {{ field("button_padding") | json_encode() }});
+
+{% if renderer %}
+    style.load(id);
+{% endif %}
+{# background hover effect #}
+{# style.css(elementSelector+ '.bg-hover-zoom-in', 'transform', 'scale(1.0)');
+style.css(elementSelector+ '.bg-hover-zoom-in:hover', 'transform', 'scale(1.2)');
+style.css(elementSelector+ '.bg-hover-zoom-out', 'transform', 'scale(1.2)');
+style.css(elementSelector+ '.bg-hover-zoom-out:hover', 'transform', 'scale(1.0)');
+style.css(elementSelector+ '.bg-hover-move-left', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-left:hover', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-right', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-right:hover', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-up', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-up:hover', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-down', 'border', 'solid 1px red');
+style.css(elementSelector+ '.bg-hover-move-down:hover', 'border', 'solid 1px red'); #}

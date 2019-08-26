@@ -1,0 +1,108 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+    {% if field("enable_height") %}
+     enableHeight = {{ field("enable_height") }},
+    {% else %}
+      enableHeight = false,
+    {% endif %}
+    frontIMG = {{ field("flipbox_front_media") | json_encode() }},
+    backIMG = {{ field("flipbox_back_media") | json_encode() }},
+    frontImgSelector = id + " .qx-flipbox_frontlayer .qx-element-flip-box___media ",
+    backImgSelector = id + " .qx-flipbox_backlayer .qx-element-flip-box___media ",
+    frontTitle = id + " .qx-flipbox_frontlayer .qx-element-flip-box__title h3 ",
+    frontContent = id + " .qx-flipbox_frontlayer .qx-element-flip-box__body ",
+    backTitle = id + " .qx-flipbox_backlayer .qx-element-flip-box__title h3 ",
+    backContent = id + " .qx-flipbox_backlayer .qx-element-flip-box__body ",
+    wrapperSelector = id + " .qx-element-flip-box__wrapper ",
+    parentLayer = id + " .qx-flipbox",
+    layer = id + " .qx-flipbox_layer",
+    frontLayer = id + " .qx-flipbox_frontlayer",
+    backLayer = id + " .qx-flipbox_backlayer",
+    buttonWrap = id + " .qx-element-flip-box__button .qx-btn";
+
+// svg
+if( frontIMG.media ) {
+  if( frontIMG.media.type == "svg" ) {
+    style.css( frontImgSelector + " path", "fill", frontIMG.media.properties.color )
+    style.css( frontImgSelector + " svg", 'width', frontIMG.media.properties.size.value +  frontIMG.media.properties.size.unit)
+    style.css( frontImgSelector + " svg", 'height', frontIMG.media.properties.size.value +  frontIMG.media.properties.size.unit)
+
+    style.css( frontImgSelector + " i", 'color', frontIMG.media.properties.color)
+    style.css( frontImgSelector + " i", 'font-size', frontIMG.media.properties.size.value +  frontIMG.media.properties.size.unit)
+  }
+}
+
+if( backIMG.media ) {
+  if( backIMG.media.type == "svg" ) {
+    style.css( backImgSelector + " path", "fill", backIMG.media.properties.color )
+    style.css( backImgSelector + " svg", 'width', backIMG.media.properties.size.value +  backIMG.media.properties.size.unit)
+    style.css( backImgSelector + " svg", 'height', backIMG.media.properties.size.value +  backIMG.media.properties.size.unit)
+
+    style.css( backImgSelector + " i", 'color', backIMG.media.properties.color)
+    style.css( backImgSelector + " i", 'font-size', backIMG.media.properties.size.value +  backIMG.media.properties.size.unit)
+  }
+}
+
+// Typography
+style.typography( frontTitle, {{ field('flipbox_frontTitle_typography') | json_encode() }});
+style.typography( frontContent, {{ field('flipbox_frontContent_typography') | json_encode() }});
+style.typography( backTitle, {{ field('flipbox_backTitle_typography') | json_encode() }});
+style.typography( backContent, {{ field('flipbox_backContent_typography') | json_encode() }});
+
+// Color
+style.css( frontTitle, 'color', {{ field('flipbox_frontTitle_typographyColor') | json_encode() }});
+style.css( frontContent, 'color', {{ field('flipbox_frontContent_typographyColor') | json_encode() }});
+style.css( backTitle, 'color', {{ field('flipbox_backTitle_typographyColor') | json_encode() }});
+style.css( backContent, 'color', {{ field('flipbox_backContent_typographyColor') | json_encode() }});
+
+// Background
+{% if field("flipbox_front_background_media_enable") %}
+  style.background (id + ' .qx-flipbox_frontlayer', {{ field("flipbox_front_bg") | json_encode() }})
+{% endif %}
+{% if field("flipbox_back_background_media_enable") %}
+  style.background (id + ' .qx-flipbox_backlayer', {{ field("flipbox_back_bg") | json_encode() }})
+{% endif %}
+
+// Padding
+style.padding( frontLayer, {{ field("flipbox_front_bgPadding") | json_encode() }} )
+style.padding( backLayer, {{ field("flipbox_back_bgPadding") | json_encode() }} )
+
+// Alignment
+style.css( frontLayer, 'text-align', {{ field('flipbox_front_alignment').value | json_encode() }});
+style.css( backLayer, 'text-align', {{ field('flipbox_back_alignment').value | json_encode() }});
+
+// Height
+if(enableHeight == true){
+  style.height( parentLayer, {{ field("flipbox_height") | json_encode() }} )
+}
+
+// Image Width and Height
+style.responsiveCss(frontImgSelector + ' img', {{ field("flipbox_fontmedia_width") | json_encode() }}, 'width', {{ field("flipbox_fontmedia_width").unit | json_encode() }});
+style.responsiveCss(backImgSelector + ' img', {{ field("flipbox_backmedia_width") | json_encode() }}, 'width', {{ field("flipbox_backmedia_width").unit | json_encode() }});
+
+// Border
+style.borderWidth( layer, {{ field('flexbox_border_width') | json_encode() }} );
+style.css( layer, 'border-style', {{ field('flexbox_border_type') | json_encode() }} );
+style.css( layer, 'border-color', {{ field('flexbox_border_color') | json_encode() }} );
+style.borderRadius( layer, {{ field('flexbox_border_radius') | json_encode() }} );
+
+// Button
+style.padding( buttonWrap, {{ field("flipbox_backtitle_button_padding") | json_encode() }} )
+style.background (buttonWrap, {{ field("flipbox_backTitle_button_background") | json_encode() }})
+style.typography( buttonWrap, {{ field('flipbox_backTitle_button_typography') | json_encode() }});
+style.css( buttonWrap, 'color', {{ field('flipbox_backtitle_button_color') | json_encode() }});
+style.css( buttonWrap + ':hover', 'color', {{ field('flipbox_backtitle_button_color_hover') | json_encode() }});
+style.border( buttonWrap, {{ field('flipbox_backTitle_button_border') | json_encode() }} );
+
+// Spacing
+style.css( frontImgSelector, 'margin-bottom', "{{ field('flipbox_frontimage_spacing').value ~ field('flipbox_frontimage_spacing').unit }}" );
+style.css( backImgSelector, 'margin-bottom', "{{ field('flipbox_backimage_spacing').value ~ field('flipbox_backimage_spacing').unit }}" );
+style.css( frontTitle, 'margin-bottom', "{{ field('flipbox_fronttitle_spacing').value ~ field('flipbox_fronttitle_spacing').unit }}" );
+style.css( frontContent, 'margin-bottom', "{{ field('flipbox_frontcontent_spacing').value ~ field('flipbox_frontcontent_spacing').unit }}" );
+style.css( backTitle, 'margin-bottom', "{{ field('flipbox_backtitle_spacing').value ~ field('flipbox_backtitle_spacing').unit }}" );
+style.css( backContent, 'margin-bottom', "{{ field('flipbox_backcontent_spacing').value ~ field('flipbox_backcontent_spacing').unit }}" );
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

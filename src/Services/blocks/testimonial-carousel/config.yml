@@ -1,0 +1,377 @@
+name: Testimonial Carousel
+slug: testimonial-carousel
+groups: pro
+form:
+  general:
+    - name: testimonial-carousel_fg_repeater
+      lable: Testimonials
+      type: group-repeater
+      schema:
+        - name: tname
+          label: Name
+          type: text
+          value: John Doe
+
+        - name: content
+          label: Testimonial
+          type: textarea
+          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+
+        - name: position
+          label: Position
+          type: text
+          value: Developer
+
+        - name: image
+          type: media
+          value: 'libraries/quix/assets/images/placeholder.png'
+
+        - name: alt_text
+          label : Alt Text
+          type: text
+          help : Google focuses on alt text when trying to understand what an image is about. So it's valuable for SEO, in addition to being useful for users.
+          depends:
+            image: '*'
+
+        - name: caption
+          type: text
+          depends:
+            image: '*'
+      value:
+        - name: John Doe
+          position: CEO
+          image: 'libraries/quix/assets/images/placeholder.png'
+
+        - name: Andrea Peake
+          position: COO
+          image: 'libraries/quix/assets/images/placeholder.png'
+
+        - name: Yvonne Clark
+          position: CMO
+          image: 'libraries/quix/assets/images/placeholder.png'
+          
+
+    - name : testimonial-carousel_fg_layouts
+      label: Layouts
+      type: fields-group
+      status  : open
+      schema :
+        - name : layout_skin
+          type: select
+          label: Skin
+          value: default
+          options:
+            default : Default
+
+        - name : image_layout
+          type: select
+          label: Image Layout
+          value: inline
+          options:
+            inline : Inline
+            stacked : Stacked
+            above : Above
+            left : Left
+            right : Right
+
+    - name    : testimonial-carousel_fg_navigation
+      label   : Navigation
+      type    : fields-group
+      schema  :
+        - name : show_arrow_navigation
+          label: Show Arrow Navigation
+          type : switch
+          value: true
+
+        - name : arrow
+          label: Arrow
+          type : select
+          value: in
+          depends:
+            show_arrow_navigation: true
+          options:
+            in : Inside
+            out : Outside
+
+        - name : show_dot_navigation
+          label: Show Dot Navigation
+          type : switch
+          value: true
+
+        - name: pause_on_hover
+          label: Pause on Hover
+          type: switch
+          value: true
+
+        - name : auto_play
+          label: Auto Play
+          type : switch
+          value: true
+
+        - name: autoplay_speed
+          label: Autoplay Speed ( MS )
+          type: text
+          value: 5000
+          depends:
+            auto_play: true
+
+        - name: infinite_loop
+          label: Infinite Loop
+          type: switch
+          value: false
+
+  styles:
+    - name : testimonial-carousel_fg_testimonial
+      label: Testimonial
+      type: fields-group
+      status  : open
+      schema :
+        - name : content_alignment
+          type : choose
+          value:
+            desktop: center
+            tablet : center
+            phone : center
+          options:
+            left :
+              label: Left
+              icon : qxuicon-align-left
+            center :
+              label : Center
+              icon : qxuicon-align-center
+            right :
+              label : Right
+              icon : qxuicon-align-right
+
+        - name  : slider_padding
+          label : Spacing
+          type: dimensions
+          units: px
+          defaultUnit: px
+          value:
+            top: 40
+            bottom: 40
+            left: 100
+            right: 100
+            tablet:
+              top: 20
+              bottom: 20
+              left: 50
+              right: 50
+            phone:
+              top: 20
+              bottom: 20
+              left: 50
+              right: 50
+
+    - name    : testimonial-carousel_fg_image
+      label   : Image
+      type    : fields-group
+      schema  :
+        - name : width
+          label : Width
+          type: slider
+          units: px
+          defaultUnit: px
+          value: 150
+          max : 1000
+          min : 20
+
+        # - name : image_alignment
+        #   label: Position
+        #   type : choose
+        #   value: left
+        #   responsive: false
+        #   options:
+        #     left :
+        #       label : Left
+        #       icon : qxuicon-arrow-to-left
+        #     right :
+        #       label : Right
+        #       icon : qxuicon-arrow-to-right
+        #     top :
+        #       label: Top
+        #       icon : qxuicon-arrow-to-top
+        #     bottom :
+        #       label: Bottom
+        #       icon : qxuicon-arrow-to-bottom
+
+        - name  : image_spacing
+          label : Spacing
+          type: slider
+          max : 100
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 15
+            tablet : 15
+            phone : 15
+
+        - name  : image_border_radius
+          label : Border Radius
+          type: slider
+          max : 100
+          defaultUnit: %
+          value:
+            desktop : 50
+            tablet : 50
+            phone : 50
+
+    - name : testimonial-carousel_fg_name
+      label: Name
+      type: fields-group
+      schema :
+        - name  : name_spacing
+          label : Spacing
+          type: slider
+          max : 80
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 15
+            tablet : 15
+            phone : 15
+
+        - name  : name_color
+          label : Color
+          type  : color
+
+        - name: name_font
+          label : Typography
+          type: typography
+
+    - name : testimonial-carousel_fg_position
+      label: Position
+      type: fields-group
+      schema :
+        - name  : position_spacing
+          label : Spacing
+          type: slider
+          max : 80
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 15
+            tablet : 15
+            phone : 15
+
+        - name  : position_color
+          label : Color
+          type  : color
+
+        - name: position_font
+          label : Typography
+          type: typography
+
+    - name : testimonial-carousel_fg_content
+      label: Content
+      type: fields-group
+      schema :
+        - name  : content_color
+          label : Color
+          type  : color
+
+        - name  : content_spacing
+          label : Spacing
+          type: slider
+          max : 80
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 20
+            tablet : 20
+            phone : 20
+
+        - name: content_font
+          label : Typography
+          type: typography
+
+        # - name  : content_padding
+        #   label : Padding
+        #   type: dimensions
+        #   max : 50
+        #   units: px
+        #   defaultUnit: px
+        #   value:
+        #     top: 25
+        #     bottom: 25
+        #     left: 40
+        #     right: 40
+        #     tablet:
+        #       top: 20
+        #       bottom: 20
+        #       left: 20
+        #       right: 20
+        #     phone:
+        #       top: 20
+        #       bottom: 20
+        #       left: 20
+        #       right: 20
+
+    - name    : testimonial-carousel_fg_navigation-style
+      label   : Navigation
+      type    : fields-group
+      status  : close
+      schema  :
+        - name: arrow_color
+          label: Arrow Color
+          type: color
+          value: rgba(102, 102, 102, 0.6)
+
+        - name  : arrow_size
+          label : Arrow Size
+          type: slider
+          max : 100
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 25
+            tablet : 25
+            phone : 20
+
+        - name: dot_divider
+          type: divider
+          label: Dot
+
+        - name: dot_color
+          label: Dot Color
+          type: color
+          value: rgba(238, 238, 238, 1)
+
+        - name: dot_active_color
+          label: Dot Active Color
+          type: color
+          value: rgba(102, 102, 102, 0.6)
+
+        - name  : dot_width
+          label : Dot Width
+          type: slider
+          max : 100
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 15
+            tablet : 15
+            phone : 15
+
+        - name  : dot_spacing
+          label : Dot Spacing
+          type: slider
+          max : 100
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 12
+            tablet : 12
+            phone : 10
+
+        - name  : dot_margin
+          label : Dot Margin
+          type: slider
+          max : 100
+          units: px
+          defaultUnit: px
+          value:
+            desktop : 25
+            tablet : 25
+            phone : 20

@@ -1,0 +1,145 @@
+{% macro getLabel(id, label, name, req, reqmark) %}
+    {% if label and name  and req and reqmark %}
+        <label for="{{ id }}">{{ name }} <strong>*</strong></label>
+    {% elseif label and name %}
+        <label for="{{ id }}">{{ name }}</label>
+    {% endif %}
+{% endmacro %}
+
+{% macro getHelp(id, desc) %}
+    {% if desc %}
+        <small id="{{ id }}Help" class="form-text text-muted">{{ desc }}</small>
+    {% endif %}
+{% endmacro %}
+
+{% macro getSubmit(id, info, useReCaptchar) %}
+{% set src = info[4] %}
+{% set enableCaptcha = info[6] %}
+{# [submit_text, submit_size, submit_column, submit_alignment, icon] #}
+{% set btnClass = classNames('qx-btn qx-btn-primary qx-btn-' ~ info[1], 
+    (info[5] ? 'qx-btn-block' : '')
+) %}
+    <div class="qx-form-group form-submit">
+        {% if enableCaptcha and useReCaptchar %}
+            <button disabled class="{{ btnClass }} qx-disabled" type="submit">
+        {% else %}
+            <button class="{{ btnClass }}" type="submit">
+        {% endif %}
+            <span class="qx-flex qx-flex-middle">
+            {% if src.media %}
+                {% if src.media.type == "svg" %}
+                    {{ loadSvg(src.media.svg)|raw }}
+                {% endif %}
+            {% elseif src.url %}
+                {{ image(src.url, alt_text) | link(link) }}
+            {% endif %}
+
+            {{ info[0]|raw }}
+            </span>
+        </button>
+    </div>
+{% endmacro %}
+
+{% macro getInput(index, id, attributes, data) %}
+{% if data.item_label.value is defined %}
+    {% set itemLabel = data.item_label.value %}
+{% else %}
+    {% set itemLabel = data.title.value %}
+{% endif %}
+
+{% set name = itemLabel %}
+{% set rawName = data.title.value|raw|replace({'-': '', ' ': ''})|lower %}
+{% set id = [id, index, rawName]|join %}
+
+{% set label = attributes[0] %}
+{% set size = attributes[1] %}
+{% set reqmark = attributes[2] %}
+{% set isRequired = data.required.value ? "true" : "false" %}
+<div id="{{ id }}" class="qx-form-group qx-form-group-{{index}}">
+
+    {% if rawName == '' %}
+        <p class="alert alert-warning">
+            You must use a name for field!
+        </p>
+    {% else %}
+
+
+        {% if data.type.value != 'hidden' and data.type.value != 'html' %}
+            {{ _self.getLabel(id, label, name, data.required.value, reqmark) }}
+        {% endif %}
+
+        {% if data.type.value == 'radio' or data.type.value == 'checkbox' %}
+
+            {% set optionsList = data.options.value|split('\n') %}
+            {% for item in optionsList %}
+                {% set optionid = id %}
+                <div class="qx-form-check{{ (data.inline.value ? ' qx-form-check-inline' : '') }}">
+                  <input class="qx-form-check-input" type="{{ data.type.value|default('checkbox') }}" name="jform[{{ rawName }}]" id="{{ optionid }}" value="{{ item }}" required="{{ isRequired }}">
+                  <label class="qx-form-check-label" for="{{ optionid }}">
+                    {{ item }}
+                  </label>
+                </div>
+            {% endfor %}
+        {% elseif data.type.value == 'acceptance' and data.acceptance_checked.value %}
+            <div class="qx-form-check qx-form-check-inline">
+
+                {% set acceptanceText = data.acceptance.value|raw %}
+
+                <input class="qx-form-check-input" type="checkbox" name="jform[{{ rawName }}]" id="{{ id }}" checked="{{ data.acceptance_checked.value|default(false) }}" required="{{ isRequired }}" >
+
+
+                <label class="qx-form-check-label" for="{{ id }}">
+                    {{ acceptanceText|raw }}
+                </label>
+            </div>
+
+        {% elseif data.type.value == 'acceptance' %}
+            <div class="qx-form-check">
+
+            {% set acceptanceText = data.acceptance.value|raw %}
+
+                <input class="form-check-input" type="checkbox" name="jform[{{ rawName }}]" id="{{ id }}" required="{{ isRequired }}" >
+
+
+                <label class="form-check-label" for="{{ id }}">
+                    {{ acceptanceText|raw }}
+                </label>
+            </div>
+
+        {% elseif data.type.value == 'html' %}
+            <div class="qx-form-html">
+
+                {{ data.html.value|raw }}
+
+            </div>
+
+        {% elseif data.type.value == 'select' and data.multiple.value %}
+            <select id="{{ id }}" class="qx-form-control" multiple required="{{ isRequired }}" name="jform[{{ rawName }}]">
+                {% set optionsList = data.options.value|split('\n') %}
+                {% for item in optionsList %}
+                    <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+        {% elseif data.type.value == 'select' %}
+            <select id="{{ id }}" class="qx-form-control" required="{{ isRequired }}" name="jform[{{ rawName }}]">
+                {% set optionsList = data.options.value|split('\n') %}
+                {% for item in optionsList %}
+                    <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+        {% elseif data.type.value == 'textarea' %}
+            <textarea name="jform[{{ rawName }}]" class="qx-form-control qx-form-control-{{ data.size.value|default('md') }}" id="{{ id }}" rows="{{ data.row.value|default(10) }}" aria-describedby="{{ name }}" placeholder="{{ data.placeholder.value|e }}" required="{{ isRequired }}" placeholder="{{ data.placeholder.value|e }}"></textarea>
+        {% elseif data.multiple.value  %}
+            <input type="{{ data.type.value|default('text') }}" name="jform[{{ rawName }}]" class="qx-form-control qx-form-control-{{ data.size.value|default('md') }}" id="{{ id }}" aria-describedby="{{ name }}" placeholder="{{ data.placeholder.value|e }}" value="{{ data.type.value == 'hidden' ? data.hidden_value.value : '' }}" required="{{ isRequired }}"  multiple />
+        {% else %}
+            <input type="{{ data.type.value|default('text') }}" name="jform[{{ rawName }}]" class="qx-form-control qx-form-control-{{ data.size.value|default('md') }}" id="{{ id }}" aria-describedby="{{ name }}" placeholder="{{ data.placeholder.value|e }}" value="{{ data.type.value == 'hidden' ? data.hidden_value.value : '' }}" required="{{ isRequired }}" />
+        {% endif %}
+
+        {% if data.type.value != 'hidden' %}
+            {{ _self.getHelp(id, data.desc.value) }}
+        {% endif %}
+
+    {% endif %}
+
+</div>
+{% endmacro %}

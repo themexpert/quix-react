@@ -1,0 +1,7 @@
+setTimeout(function() {
+  jQuery(function($){
+  	qxUIkit.util.on("#{{ field("id") }} .counter-count", 'inview show', function () {
+    	jQuery("#{{ field("id") }} #counter-mount").jQuerySimpleCounter({start: {{ field("count_start") | default(0) }}, end: {{ field("count_end")| default(100) }},duration: {{ field("duration") | default(3000) }}});
+	});
+  });
+}, 700);

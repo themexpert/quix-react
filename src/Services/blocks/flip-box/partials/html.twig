@@ -1,0 +1,162 @@
+{% set id = field('id') %}
+{% set class = field('class') %}
+{% set effect = field('flipbox_effect') %}
+{% set direction = field('flipbox_direction') %}
+{% set depth3D = field('flip_3d_depth') %}
+{% set test = field('flipbox_front_media') %}
+{# For Front #}
+{% set frontTag = field('flipbox_front_htmltag') %}
+{% set frontEnable = field('flipbox_frontmedia_enable') %}
+{% set frontSRC = field('flipbox_front_media') %}
+{% set frontAltText = field('flipbox_frontmedia_alttext') %}
+{% set frontIconView = field('flipbox_fronticon_view') %}
+{% set frontIconShape = field('flipbox_fronticon_shape') %}
+{% set frontVAlign = field('flipbox_front_v_align') %}
+{# For Back #}
+{% set backTag = field('flipbox_back_htmltag') %}
+{% set backEnable = field('flipbox_backmedia_enable') %}
+{% set backSRC = field('flipbox_back_media') %}
+{% set backAltText = field('flipbox_backmedia_alttext') %}
+{% set backIconView = field('flipbox_backicon_view') %}
+{% set backIconShape = field('flipbox_backicon_shape') %}
+{% set backVAlign = field('flipbox_back_v_align') %}
+{% set enableButton = field('flipbox_back_enable_button') %}
+
+{%
+  set wrapperClasses = classNames('qx-element-flip-box__wrapper', class)
+%}
+{% set frontVAlign = classNames('qx-d-flex',
+  field('flipbox_front_v_align').value ? field('flipbox_front_v_align').value : ''
+) %}
+{% set backVAlign = classNames('qx-d-flex',
+  field('flipbox_back_v_align').value ? field('flipbox_back_v_align').value : ''
+) %}
+
+{# {{dump(frontVAlign)}}
+{{dump(backVAlign)}} #}
+
+{% set classes = classNames('qx-element qx-element-flip-box-v2', visibilityClass(node.visibility), class) %}
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+  
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+      <div class="{{ wrapperClasses }} {{ effect }} {{ direction }} {{ depth3D ? 'qx-flexbox-3d' : ''}}">
+
+          <div class="qx-flipbox">
+            {# Start Front #}
+            <div id="{{ id }}_front" class="qx-flipbox_layer qx-flipbox_frontlayer {{frontVAlign}} ">
+              <div class="qx-flexbox-overlay">
+                <div class="qx-flexbox-inner">
+                  {% if frontEnable == true %}
+                    <figure class="qx-element-flip-box___media {{ frontIconView }} {{ frontIconShape }}">
+                      {% if frontSRC.media %}
+                        {% if frontSRC.media.type == "svg" %}
+                          <div class="qx-flipbox-icon">
+                            {{ loadSvg(frontSRC.media.svg) | raw }}
+                          </div>
+                        {% else %}
+                          {{ image( frontSRC.media.image, frontAltText) }}
+                        {% endif %}
+                      {% elseif frontSRC.url %}
+                          {{ image(frontSRC.url, frontAltText) }}
+                      {% endif %}
+                    </figure>
+
+                  <div class="qx-element-flip-box__content">
+                    <div class="qx-element-flip-box__title">
+                      {{ field('flipbox_front_title') | wrap(frontTag) }}
+                    </div>
+                    <div class="qx-element-flip-box__body">
+                      {{ field('flipbox_front_content')|raw }}
+                    </div>
+                  </div>
+                  {% else %}
+
+                  <div class="qx-element-flip-box__content">
+                    <div class="qx-element-flip-box__title">
+                      {{ field('flipbox_front_title') | wrap(frontTag) }}
+                    </div>
+                    <div class="qx-element-flip-box__body">
+                      {{ field('flipbox_front_content')|raw }}
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {# End Front #}
+
+            {# Start Back #}
+            <div id="{{ id }}_back" class="qx-flipbox_layer qx-flipbox_backlayer {{backVAlign}} ">
+              <div class="qx-flexbox-overlay">
+                  <div class="qx-flexbox-inner">
+                    {% if backEnable == true %}
+                    <figure class="qx-element-flip-box___media {{ backIconView }} {{ backIconShape }}">
+                      {% if backSRC.media %}
+                        {% if backSRC.media.type == "svg" %}
+                        <div class="qx-flipbox-icon">
+                          {{ loadSvg(backSRC.media.svg) | raw }}
+                        </div>
+                        {% else %}
+                          {{ image( backSRC.media.image, backAltText) }}
+                        {% endif %}
+                      {% elseif backSRC.url %}
+                          {{ image(backSRC.url, backAltText) }}
+                      {% endif %}
+                    </figure>
+
+                    <div class="qx-element-flip-box__content">
+                      <div class="qx-element-flip-box__title">
+                        {{ field('flipbox_back_title') | wrap(backTag) }}
+                      </div>
+                      <div class="qx-element-flip-box__body">
+                        {{ field('flipbox_back_content')|raw }}
+                      </div>
+                    </div>
+                    {% else %}
+
+                    <div class="qx-element-flip-box__content">
+                      <div class="qx-element-flip-box__title">
+                        {{ field('flipbox_back_title') | wrap(backTag) }}
+                      </div>
+                      <div class="qx-element-flip-box__body">
+                        {{ field('flipbox_back_content')|raw }}
+                      </div>
+                    </div>
+                    {% endif %}
+
+                    {% if enableButton %}
+                      {% set link = field('flipbox_back_button_link') %}
+                      {% set type = field('flipbox_back_button_type') %}
+                      {% set outline = field('flipbox_back_button_outline') %}
+                      {% set full_width = field('flipbox_back_button_full_width') %}
+                      {% set btnClass = 'qx-btn qx-btn-' ~ type %}
+        
+                      {% if outline %}
+                        {% set btnClass = 'qx-btn qx-btn-outline-' ~ type %}
+                      {% endif %}
+                      {% if full_width %}
+                        {% set btnClass = btnClass ~ ' qx-btn-block' %}
+                      {% endif %}
+                      <div class="qx-element-flip-box__button">
+                      {{ field('flipbox_back_button_text') | link(link, btnClass) }}
+                      </div>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+            {# End Back #}
+          </div>
+        </div>
+  {% endblock %}
+{% endembed %}

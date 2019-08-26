@@ -1,0 +1,116 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+	img = id + " img",
+	listItem = id + " .qx-media",
+	groupItem = id + " .qx-card",
+	titleSelector = id + " .qx-media-heading",
+	groupTitleSelector = id + " .qx-card-title",
+	metaSelector = id + " .qx-post-meta",
+	imageSelector = id + " figure",
+	bodySelector = id + " .qx-media-body",
+	groupBodySelector = id + " .qx-card-body",
+	introSelector = id + " .qx-element-jarticle-introtext",
+	groupIntroSelector = id + " .qx-card-text",
+	btnSelector = id + " .qx-btn",
+
+	iconBtb = {{ field("show_icon") | json_encode() }},
+	iconBtn_alignment = {{ field("icon_alignment").value | json_encode() }},
+	iconBtn_spacing = {{ field("icon_spacing") | json_encode() }},
+	iconBtnSelector = id + ' a.qx-btn svg,' + id + ' a.qx-btn i',	
+	iconBtnHoverSelector = id + ' a.qx-btn';	
+
+// Width > img
+style.width( img, {{ field('image_size') | json_encode() }}, '%' ); 
+
+{# Group Item #}
+// border + box shadow 
+style.border ( listItem + ',' + groupItem, {{ field("item_border") | json_encode() }})
+style.margin ( listItem + ',' + groupItem, {{ field("bg_margin") | json_encode() }})
+style.padding( listItem + ',' + groupItem, {{ field('bg_padding') | json_encode() }}); //groupBodySelector
+style.css (    listItem + ',' + groupItem, 'background-color', {{ field("bg_color") | json_encode() }})
+
+// Alignment
+style.alignment(listItem, {{ field('alignment') | json_encode() }});
+style.alignment(groupItem, {{ field('alignment') | json_encode() }});
+style.alignment(listItem, {{ field('nalignment') | json_encode() }});
+style.alignment(groupItem, {{ field('nalignment') | json_encode() }});
+
+// Title
+style.css( titleSelector, 'line-height', '1.1' );
+style.css( titleSelector, 'font-size', '24px' );
+style.typography( titleSelector, {{ field('title_font') | json_encode() }} );
+style.css( titleSelector + "{{greaterThanSign()}}" + ' *', 'color', {{ field('title_color') | json_encode() }} );
+style.css( titleSelector + "{{greaterThanSign()}}" + ' *:hover', 'color', {{ field('title_hvcolor') | json_encode() }} );
+style.margin( titleSelector, {{ field('title_margin') | json_encode() }} );
+
+style.typography( groupTitleSelector, {{ field('title_font') | json_encode() }} );
+style.css( groupTitleSelector + "{{greaterThanSign()}}" + ' *', 'color', {{ field('title_color') | json_encode() }} );
+style.css( groupTitleSelector + "{{greaterThanSign()}}" + ' *:hover', 'color', {{ field('title_hvcolor') | json_encode() }} );
+style.margin( groupTitleSelector, {{ field('title_margin') | json_encode() }} );
+
+// Meta
+style.css( metaSelector, 'font-size', '13px' );
+style.typography( metaSelector, {{ field('meta_font') | json_encode() }} );
+style.css( metaSelector + ' *', 'color', {{ field('meta_color') | json_encode() }} );
+style.css( metaSelector + ' i', 'color', {{ field('metaIcon_color') | json_encode() }} );
+style.css( metaSelector + ' i', 'font-size', "{{ field('metaIcon_size').value ~ field('metaIcon_size').unit }}");
+style.css( metaSelector + ' span', 'margin-right', "{{ field('meta_spacing').value ~ field('meta_spacing').unit }}");
+style.margin( metaSelector, {{ field('meta_margin') | json_encode() }} );
+
+// Intro Text
+style.css( introSelector, 'line-height', 'normal' );
+style.typography( introSelector, {{ field('introtext_font') | json_encode() }} );
+style.css( introSelector, 'color', {{ field('introtext_color') | json_encode() }} );
+style.margin( introSelector, {{ field('introtext_margin') | json_encode() }} );
+
+style.typography( groupIntroSelector, {{ field('introtext_font') | json_encode() }} );
+style.css( groupIntroSelector, 'color', {{ field('introtext_color') | json_encode() }} );
+style.margin( groupIntroSelector, {{ field('introtext_margin') | json_encode() }} );
+
+// Button
+style.typography( btnSelector, {{ field('readmore_font') | json_encode() }} );
+style.css( btnSelector, 'color', {{ field('readmore_color') | json_encode() }});
+style.css( btnSelector + ':hover', 'color', {{ field('readmoreHover_color') | json_encode() }});
+style.css( iconBtnHoverSelector + ':hover i', 'color', {{ field('iconHover_color') | json_encode() }});
+style.css( iconBtnHoverSelector + ':hover', 'text-decoration', 'none');
+style.padding( btnSelector, {{ field('readmore_padding') | json_encode() }});
+style.background (btnSelector, {{ field("readmore_bg") | json_encode() }}, id)
+// border + box shadow 
+style.border (btnSelector, {{ field("readmore_border") | json_encode() }})
+
+{# For Icon #}
+if( iconBtb.media ) {
+  if( iconBtb.media.type == "svg" ) {
+    var size = {{ prepareSvgSizeValue(field("show_icon").media.properties.size)|json_encode() }};
+
+    style.css( iconBtnSelector + " path", "fill", iconBtb.media.properties.color )
+    style.css( iconBtnSelector, 'width', size.value +  size.unit)
+    style.css( iconBtnSelector, 'height', size.value +  size.unit)
+    
+    style.css( iconBtnSelector, 'color', iconBtb.media.properties.color)
+    style.css( iconBtnSelector, 'font-size', size.value +  size.unit)
+  }
+}
+
+{# For Icon Spacing #}
+if( iconBtn_alignment == 'left'){
+  style.css( iconBtnSelector, 'margin-right', iconBtn_spacing.value +  iconBtn_spacing.unit)
+} else if( iconBtn_alignment == 'right'){
+  style.css( iconBtnSelector, 'margin-left', iconBtn_spacing.value +  iconBtn_spacing.unit)
+}
+
+
+{# Body #}
+{# style.css( bodySelector, 'background-color', {{ field('bg_color') | json_encode() }}); #}
+{# style.margin( bodySelector, {{ field('bg_margin') | json_encode() }}); #}
+{# style.padding( bodySelector, {{ field('bg_padding') | json_encode() }}); #}
+
+{# style.css( groupBodySelector, 'background-color', {{ field('bg_color') | json_encode() }}); #}
+{# style.margin( groupBodySelector, {{ field('bg_margin') | json_encode() }}); #}
+{# style.padding( groupBodySelector, {{ field('bg_padding') | json_encode() }}); #}
+
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

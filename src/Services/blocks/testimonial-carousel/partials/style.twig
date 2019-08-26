@@ -1,0 +1,130 @@
+{% include 'global.twig' %}
+var id = "#{{ field("id") }}"
+    img = {{ field("image") | json_encode() }},
+    img_alignment = {{ field("image_alignment").value | json_encode() }},
+    img_layout = {{ field("image_layout") | json_encode() }},
+    tcWrapperSelector = id + " .qx-element-testimonial-carousel__wrapper",
+    sliderWrapperSelector = id + " .qx-slider-items",
+    imgSpacing = id + " .qx-testimonial__media_author",
+    mediaSelector = id + " .qx-element-testimonial__media",
+    imgSelector = id + " .qx-element-testimonial__media img",
+    imgSelectorMedia = id + " .qx-element-testimonial__media img," + id + " .qx-element-testimonial__media i",
+    nameSelector = id + ' .qx-testimonial__name',
+    positionSelector = id + ' .qx-testimonial__position',
+    imageInline = id + ' .image-position-inline',
+    contentWrapper = id + ' .qx-testimonial__description',
+    contentSelector = id + ' .qx-testimonial__description p',
+    arrowSelector = id + " .qx-icon *",
+    dotSelector = id + " .qx-dotnav li",
+    dotItemSelector = id + " .qx-dotnav li *",
+    dotActiveItemSelector = id + " .qx-dotnav li.qx-active *",
+
+// Testimonial
+style.css( contentSelector, 'font-size', '20px');
+style.css( contentSelector, 'color', {{ field('content_color') | json_encode() }});
+style.typography(contentSelector, {{ field('content_font') | json_encode() }});
+style.responsiveCss(contentSelector, {{ field("content_spacing") | json_encode() }}, 'margin-bottom', {{ field("content_spacing").unit | json_encode() }});
+style.alignment( id, {{ field('content_alignment') | json_encode() }});
+
+// Padding
+style.padding(tcWrapperSelector, {{ field('slider_padding') | json_encode() }})
+{# style.css(sliderWrapperSelector, 'display', 'inline'); #}
+
+
+{# Media #}
+style.css( imgSelector, 'object-fit', 'cover');
+style.width( imgSelector, {{ field('width') | json_encode() }} );
+style.height( imgSelector, {{ field('width') | json_encode() }} );
+style.responsiveCss(imgSelector, {{ field("image_border_radius") | json_encode() }}, 'border-radius', {{ field("image_border_radius").unit | json_encode() }});
+{# style.desktop( imageInline + ' .qx-testimonial__position', "text-align: left;") #}
+
+if(img_layout == "inline"){
+  style.responsiveCss(imgSelectorMedia, {{ field("image_spacing") | json_encode() }}, 'margin-right', {{ field("image_spacing").unit | json_encode() }});
+}else if(img_layout == "left"){
+  style.responsiveCss(imgSelectorMedia, {{ field("image_spacing") | json_encode() }}, 'margin-right', {{ field("image_spacing").unit | json_encode() }});
+}else if(img_layout == "right"){
+  style.responsiveCss(imgSelectorMedia, {{ field("image_spacing") | json_encode() }}, 'margin-left', {{ field("image_spacing").unit | json_encode() }});
+}
+else{
+  style.responsiveCss(imgSelectorMedia, {{ field("image_spacing") | json_encode() }}, 'margin-bottom', {{ field("image_spacing").unit | json_encode() }});
+}
+
+
+{# Image spacing #}
+{# if( img_alignment == 'top'){
+  style.responsiveCss(mediaSelector, {{ field("image_spacing") | json_encode() }}, 'margin-bottom', {{ field("image_spacing").unit | json_encode() }});
+} else if( img_alignment == 'bottom'){
+  style.responsiveCss(mediaSelector, {{ field("image_spacing") | json_encode() }}, 'margin-top', {{ field("image_spacing").unit | json_encode() }});
+} else if( img_alignment == 'right'){
+  style.responsiveCss(mediaSelector, {{ field("image_spacing") | json_encode() }}, 'margin-left', {{ field("image_spacing").unit | json_encode() }});
+} else{
+  style.responsiveCss(mediaSelector, {{ field("image_spacing") | json_encode() }}, 'margin-right', {{ field("image_spacing").unit | json_encode() }});
+} #}
+
+{# svg #}
+if( img.media ) {
+  if( img.media.type == "svg" ) {
+    style.css( mediaSelector + " path", "fill", img.media.properties.color )
+    style.css( mediaSelector + " svg", 'width', img.media.properties.size.value +  img.media.properties.size.unit)
+    style.css( mediaSelector + " svg", 'height', img.media.properties.size.value +  img.media.properties.size.unit)
+
+    style.css( mediaSelector + " i", "color", img.media.properties.color )
+    style.css( mediaSelector + " i", 'font-size', img.media.properties.size.value +  img.media.properties.size.unit )
+  }
+}
+
+{# Name #}
+style.css( nameSelector, 'font-size', '24px' );
+style.css( nameSelector, 'color', {{ field('name_color') | json_encode() }});
+style.typography(nameSelector, {{ field('name_font') | json_encode() }});
+style.responsiveCss(nameSelector, {{ field("name_spacing") | json_encode() }}, 'margin-bottom', {{ field("name_spacing").unit | json_encode() }});
+
+{# Position #}
+style.css( positionSelector, 'font-size', '20px' );
+style.css( positionSelector, 'color', {{ field('position_color') | json_encode() }});
+style.typography(positionSelector, {{ field('position_font') | json_encode() }});
+style.responsiveCss(positionSelector, {{ field("position_spacing") | json_encode() }}, 'margin-bottom', {{ field("position_spacing").unit | json_encode() }});
+
+{# Content #}
+style.css( contentSelector, 'font-size', '18px' );
+{# style.css( contentSelector, 'flex', 2 ); #}
+style.css( contentSelector, 'display', 'inline-block' );
+style.css( contentSelector, 'color', {{ field('content_color') | json_encode() }});
+style.typography(contentSelector, {{ field('content_font') | json_encode() }});
+{# style.responsiveCss(contentSelector, {{ field("content_spacing") | json_encode() }}, 'margin-bottom', {{ field("content_spacing").unit | json_encode() }});
+style.padding(contentSelector + " p", {{ field('content_padding') | json_encode() }}) #}
+{# style.css( contentWrapper, 'flex', 2 ); #}
+{# style.padding(contentWrapper, {{ field('content_padding') | json_encode() }}) #}
+
+{# Navigation #}
+style.css (arrowSelector, "color", {{ field("arrow_color") | json_encode() }})
+style.responsiveCss(arrowSelector, {{ field("arrow_size") | json_encode() }}, 'width', {{ field("arrow_size").unit | json_encode() }});
+style.responsiveCss(arrowSelector, {{ field("arrow_size") | json_encode() }}, 'height', {{ field("arrow_size").unit | json_encode() }});
+style.css (dotItemSelector, "background-color", {{ field("dot_color") | json_encode() }})
+style.css (dotActiveItemSelector, "background-color", {{ field("dot_active_color") | json_encode() }})
+style.responsiveCss(dotItemSelector, {{ field("dot_width") | json_encode() }}, 'width', {{ field("dot_width").unit | json_encode() }});
+style.responsiveCss(dotItemSelector, {{ field("dot_width") | json_encode() }}, 'height', {{ field("dot_width").unit | json_encode() }});
+style.responsiveCss(dotSelector, {{ field("dot_spacing") | json_encode() }}, 'padding-left', {{ field("dot_spacing").unit | json_encode() }});
+style.responsiveCss(dotSelector, {{ field("dot_margin") | json_encode() }}, 'margin-top', {{ field("dot_margin").unit | json_encode() }});
+
+{% set fieldsGroup = field('testimonial-carousel_fg_repeater') %}
+{% if fieldsGroup %}
+    {% for index, fields in fieldsGroup %}
+        {% set data = fieldsGroup(fieldsGroup, index) %}
+        {% set src = data.image.value %}
+
+        {% if src.media.type == "svg" %}
+            style.desktop( sliderWrapperSelector + " li.item-{{index}} svg path", "fill: {{ src.media.properties.color }}" )
+            style.desktop( sliderWrapperSelector + " li.item-{{index}} svg", "height: {{ src.media.properties.size.value }}{{ src.media.properties.size.unit }};")
+            style.desktop( sliderWrapperSelector + " li.item-{{index}} svg", "width: {{ src.media.properties.size.value }}{{ src.media.properties.size.unit }};")
+
+            style.css( sliderWrapperSelector + " li.item-{{index}} i", 'color', "{{ src.media.properties.color }}")
+            style.css( sliderWrapperSelector + " li.item-{{index}} i", 'font-size', "{{ src.media.properties.size.value }}{{ src.media.properties.size.unit }}")
+        {% endif %} 
+
+    {% endfor %}
+{% endif %}
+
+{% if renderer %}
+  style.load(id);
+{% endif %}

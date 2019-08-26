@@ -1,0 +1,149 @@
+{% set id = field('id') %}
+{% set class = field('class') %}
+{% set tag = field('html_tag') %}
+{% set link = field('link') %}
+{% set src = field('image') %}
+{% set alt_text = field('alt_text') %}
+{% set fieldsGroup = field('images') %}
+{% set column = field('column') %}
+{% set caption = field('caption') %}
+{% set lightbox = field('lightbox') %}
+{% set lightboxStyle = field('lightbox-style') %}
+{% set standardGrid = field('standard_grid')|default('qx-grid-medium') %}
+{% set showFilter = field('show_filter')|default(false) %}
+{% set defaultFilter = field('default_filter')|default('') %}
+{% set showFilterAll = field('show_filter_all')|default(false) %}
+{% set gallery_alignment = field('gallery_alignment')|default('qx-flex-center') %}
+{% set filter_alignment = field('filter_alignment')|default('qx-flex-center') %}
+
+{% set showOverlay = field('show_overlay')|default(false) %}
+{% set showOverlayTitle = field('show_overlay_title')|default(false) %}
+{% set showOverlayCaption = field('show_overlay_caption')|default(false) %}
+{% set overlayStyle = field('overlay_style')|default('default') %}
+{% set showOverlayOnlyHover = field('show_overlay_onlyhover')|default(false) %}
+{% set overlayPosition = field('overlay_position')|default('qx-position-center') %}
+{% set overlayAlignment = field('overlay_alignment')|default('qx-text-center') %}
+
+{% 
+  set wrapperClasses = classNames('qx-element-gallery__wrapper', 
+  field('content_v_align').value ? field('content_v_align').value : "", 
+  {
+    'qx-d-md-flex qx-flex-md-row' : (field('image_alignment').value == 'left'),
+    'qx-d-md-flex qx-flex-md-row-reverse' : (field('image_alignment').value == 'right'),
+  }, class) 
+%}
+
+{% set classes = classNames('qx-element qx-element-gallery-v2', visibilityClass(node.visibility), class) %}
+
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+  
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+  {% block element %}
+    <div class="{{ wrapperClasses }}" data-qx-filter="{{showFilter ? 'target: > .galleryItemList;' : ''}}">
+      {% if showFilter and fieldsGroup %}
+        <ul class="qx-subnav qx-subnav-pill {{ filter_alignment }}">
+          {% if showFilterAll %}
+            <li class="{{ defaultFilter != '' ? '' : 'qx-active'}}" data-qx-filter-control><a href="#">{{ field('filter_all_text')|default('All') }}</a></li>
+          {% endif %}
+
+        {% set newArray = [] %}
+        {% for index, fields in fieldsGroup %}
+          {% set data = fieldsGroup(fieldsGroup, index ) %}
+          {% set tagSet = data.tag.value|split(',') %}
+          
+          {% for tag in tagSet %}
+            {% set tagClass = tag|replace({'-': '', ' ': ''})|lower %}
+              {% if tagClass and tagClass not in newArray %}
+                {% set newArray = newArray|merge([tagClass]) %}
+                <li class="{{ defaultFilter == tag ? 'qx-active' : ''}}" data-qx-filter-control=".{{ tagClass }}"><a href="#">{{ tag }}</a></li>
+              {% endif %}
+          {% endfor %}
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {# gallery_alignment,  #}
+      {% set itemsWrapperClass = classNames('qx-child-width-1-' ~ column ~ '@m', standardGrid, 
+        showFilter ? 'galleryItemList' : '',
+        gallery_alignment
+      ) %}
+      <ul class="qx-gallery-media-wrapper {{ itemsWrapperClass }}" data-qx-lightbox="animation: {{ lightboxStyle }}" qx-grid>
+
+      {% if fieldsGroup %}
+        {% for index, fields in fieldsGroup %}
+          {% set data = fieldsGroup(fieldsGroup, index ) %}
+          {% set tag = data.tag.value|replace({'-': '', ' ': ''})|lower %}
+          {% set tagSet = tag|split(',') %}
+
+          {% set count = index + 1 %}
+          {% set src = data.image.value %}
+          {% set title = data.title.value %}
+
+          {% if src.media %}
+            {% set imageLink = src.media.image %}
+          {% elseif src.url %}
+            {% set imageLink = src.url %}
+          {% endif %}
+          {% if caption %}
+            {% set captionText = data.caption.value %}
+          {% else %}
+            {% set captionText = '' %}
+          {% endif %}
+            {% set overlayTransitionClass = "" %}
+            {% if showOverlayOnlyHover %}
+              {% set overlayTransitionClass = "qx-transition-toggle" %}
+            {% endif %}
+            <li class="item-{{ count }} {{ tagSet|join(' ') }} {{ overlayTransitionClass }}">
+              <div class="qx-inline">
+                {% if lightbox %}
+                  <a href="{{ imageUrl(imageLink) }}" data-href="{{ imageUrl(imageLink) }}" data-caption="{{ captionText }}">
+                {% endif %}
+                  <figure class="qx-element-gallery__media qx-mb-0">
+                    {% if src.media %}
+                      {{ image( src.media.image, data.alt_text.value) }}
+                    {% elseif src.url %}
+                      {{ image(src.url, data.alt_text.value) }}
+                    {% endif %}
+                  </figure>
+
+                  {% if showOverlay == true %}
+                    {% set transitionClass = "" %}
+                    {% if showOverlayOnlyHover %}
+                      {% set transitionClass = "qx-transition-fade" %}
+                    {% endif %}
+
+                    {% set overlayHtml = '<div class="qx-overlay qx-overlay-'~ overlayStyle ~' qx-position-cover '~ transitionClass ~'"><div class="'~ overlayPosition ~' qx-overlay-content-wrapper qx-p-5 ' ~ overlayAlignment ~ '">'  %}
+                    
+                    {% if showOverlayTitle == true %}
+                      {% set overlayHtml = overlayHtml ~ '<h3 class="qx-gallery-title">' ~ title ~ '</h3>'  %}
+                    {% endif %}
+                    
+                    {% if showOverlayCaption == true %}
+                      {% set overlayHtml = overlayHtml ~ '<p class="qx-gallery-caption">' ~ captionText ~ '</p>'  %}
+                    {% endif %}
+                    
+                    {% set overlayHtml = overlayHtml ~ '</div></div>'  %}                  
+                        
+                    {{ overlayHtml | raw }}
+
+                  {% endif %}
+
+
+                {% if lightbox %}</a>{% endif %}
+              </div>
+            </li>
+        {% endfor %}
+      {% endif %}
+      </ul>
+    </div>
+  {% endblock %}
+{% endembed %}

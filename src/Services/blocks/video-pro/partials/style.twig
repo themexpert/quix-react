@@ -1,0 +1,37 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+	videoId = "#{{ field("id") }} #video-{{ field("id") }}",
+  img = "#{{ field("id") }} img",
+  modal = "#video-{{ field("id") }} .qx-modal-dialog",
+  playIconSelector = ".qx-element-video-v2 .playIcon";
+
+
+
+// Height
+style.height(videoId, {{ field("height") | json_encode() }});
+style.height(img, {{ field("height") | json_encode() }});
+// Width 
+style.width(videoId, {{ field("width") | json_encode() }});
+
+style.css(videoId, "margin", "0 auto")
+// Alignment
+style.alignment(id, {{ field('alignment') | json_encode() }});
+
+{# Play Icon #}
+style.css(playIconSelector, "position", "absolute");
+style.css(playIconSelector, "top", "50%");
+style.css(playIconSelector, "left", "50%");
+style.css(playIconSelector, "color", "#fff");
+style.css(playIconSelector, "font-size", "70px");
+style.css(playIconSelector, "transform", "translateX(-50%) translateY(-50%)");
+style.css(playIconSelector, "cursor", "pointer");
+style.css(playIconSelector + " a", "color", "#fff");
+style.css(playIconSelector + " a:hover", "color", "#fff");
+style.css(playIconSelector + " a:hover", "text-decoration", "none");
+
+style.css(modal, "pointer-events", "auto");
+
+{% if renderer %}
+  style.load(id);
+{% endif %}

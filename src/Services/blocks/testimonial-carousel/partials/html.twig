@@ -1,0 +1,151 @@
+{% set id = field('id') %}
+{% set class = field('class') %}
+
+{% set fieldsGroup = field('testimonial-carousel_fg_repeater') %}
+{% set imageLayout = field('image_layout') %}
+{% set contentAlignment = field('content_alignment').desktop.value %}
+
+{# {% set tag = field('html_tag') %}
+{% set link = field('link') %}
+{% set src = field('image') %}
+{% set alt_text = field('alt_text') %}
+{% set column = field('column') %}
+{% set caption = field('caption') %}
+{% set imageSet = field('set') %} #}
+
+{# {% set showOverlay = field('overlay') %}
+{% set overlayAnimation = field('overlay_animation') %}
+{% set showTitle = field('show_title') %} #}
+
+{% set arrow = field('arrow') %}
+{% set showArrowNav = field('show_arrow_navigation') %}
+{% set showDotNav = field('show_dot_navigation') %}
+{% set autoPlay = field('auto_play') %}
+
+{% set classes = classNames('qx-element qx-element-testimonial-carousel-v2', visibilityClass(node.visibility), class) %}
+{% set wrapperClasses = classNames('qx-element-testimonial-carousel__wrapper qx-position-relative qx-visible-toggle',
+    imageLayout ? 'image-layout-'~ imageLayout:''
+) %}
+
+{% set ClassesForImagePosition = classNames('image-position',
+{
+  'qx-d-md-flex qx-flex-md-column-reverse' : imageLayout == 'above',
+  'qx-d-md-flex qx-flex-md-row-reverse qx-align-items-center' : imageLayout == 'left',
+  'qx-d-md-flex qx-flex-md-row qx-align-items-center' : imageLayout == 'right',
+}) %}
+
+{% if imageLayout == 'inline' %}
+{% set imageInlinePosition = classNames('image-position-inline',
+{
+  'qx-d-md-flex qx-align-items-center' : imageLayout == 'inline',
+  'qx-justify-content-start' : contentAlignment == 'left',
+  'qx-justify-content-center' : contentAlignment == 'center',
+  'qx-justify-content-end' : contentAlignment == 'right',
+}) %}
+{% endif %}
+
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+    
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        <div
+            id="testimonial-carousel-{{id}}"
+            class="{{ wrapperClasses }} "
+            qx-slider="center:true;"
+        >
+
+            <div class="qx-slider-container qx-light">
+
+                {% if fieldsGroup %}
+                <ul
+                    class="qx-slider-items qx-child-width-1-1"
+                >
+                    {% for index, fields in fieldsGroup %}
+
+                        {% set data = fieldsGroup(fieldsGroup, index ) %}
+
+                        {% set src = data.image.value %}
+                        {% set alt_text = data.alt_text.value %}
+                        {% set name = data.tname.value %}
+                        {% set content = data.content.value %}
+                        {% set position = data.position.value %}
+                            
+                        {% if caption %}
+                        {% set captionText = data.caption.value %}
+                        {% else %}
+                        {% set captionText = '' %}
+                        {% endif %}
+
+                        <li class="qx-slider-item testimonial-carousel-slides qx-transition-toggle item-{{index}}">
+                            <div class="slider-wrapper qx-panel-wrapper {{ClassesForImagePosition}}">
+
+                                {% if content %}
+                                    <div class="qx-testimonial__description">
+
+                                        <p class="testimonial-content">{{content|raw}}</p>
+
+                                        {% if imageLayout == 'left' or imageLayout == 'right' or imageLayout == 'above'  %}
+                                        <div class="qx-testimonial__position">
+                                            {% if name %} <h3 class="qx-testimonial__name">{{name}}</h3> {% endif %}
+                                            {% if position %}<p class="qx-testimonial__position">{{position}}</p> {% endif %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                <div class="qx-testimonial__person_details {{imageInlinePosition}}">
+                                    {% if src %}
+                                        <div class="qx-element-testimonial__media">
+                                            {% if src.media %}
+                                              {% if src.media.type == "svg" %}
+                                                  {{ loadSvg(src.media.svg) | raw }}
+                                              {% else %}
+                                                  {{ image( src.media.image, alt_text)  }}
+                                              {% endif %}  
+                                            {% elseif src.url %}
+                                              {{ image(src.url, alt_text) }}
+                                            {% endif %} 
+                                        </div>
+                                    {% endif %}
+
+                                    {% if imageLayout == "inline" or imageLayout == "stacked" %}
+                                    <div class="qx-testimonial__position">
+                                        {% if name %} <p class="qx-testimonial__name">{{name}}</p> {% endif %}
+                                        {% if position %}<p class="qx-testimonial__position">{{position}}</p> {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+            </div>
+
+            {# Arrow Navigation #}
+            {% if showArrowNav %}
+            <div class="qx-visible@s">
+                <a class="qx-position-center-left{{arrow == 'out' ? '-out' : ''}} qx-position-small qx-hidden-hover" href="#" qx-slidenav-previous qx-slider-item="previous"></a>
+                <a class="qx-position-center-right{{arrow == 'out' ? '-out' : ''}} qx-position-small qx-hidden-hover" href="#" qx-slidenav-next qx-slider-item="next"></a>
+            </div>
+            {% endif %}
+
+            {# Dot Navigation #}
+            {% if showDotNav %}
+            <ul class="qx-slider-nav qx-dotnav qx-flex-center qx-margin"></ul>
+            {% endif %}
+
+        </div>
+    {% endblock %}
+{% endembed %}

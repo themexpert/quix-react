@@ -1,0 +1,142 @@
+{% set id = field('id') %}
+{% set class = field('class') %}
+
+{% set classes = classNames('qx-element qx-element-joomla-article-v2', visibilityClass(node.visibility), class ) %}
+{% set animation = "" %}
+
+{% set article_id = field('article_id') %}
+{% set show_date_format = field('date_format') %}
+{% set content_type = field('content_type') %}
+
+{% set data = {
+    'id' : article_id,
+    'show_date_format' : show_date_format
+} %}
+
+{# Icon #}
+{% set buttonText = field('readmore_text') %}
+{% set enable_Bicon = field('enable_Bicon') %}
+{% set sIcon = field('show_icon') %}
+{% set icon = '' %}
+{% set icon_alignment = field('icon_alignment') | default({'value' : 'left'}) %}
+{% if sIcon.media %}
+    {% if sIcon.media.type == "svg" %}
+        {% set icon = loadSvg(sIcon.media.svg)|raw %}
+    {% endif %}
+{% elseif sIcon.url %}
+    {% set icon = image(sIcon.url, alt_text) %}
+{% endif %}
+
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+
+{% set articleImage = "" %}
+{% set articleTitle = "" %}
+
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        {% if article_id %}
+            {% set item = ElementApiCall('joomla-article', data) %}
+        {% else %}
+            {% set item = "" %}
+        {% endif %}
+        {% if item %}
+            <article itemscope="" itemtype="https://schema.org/Article">
+                {% set images = item.images %}
+                {% set link = {'url': item.link, target: false, nofollow: false} %}
+
+                {% set layout = field('article_layout') %}
+                {% for index, name in layout %}
+                    {% if name == 'art_title' %}
+                        {% if field('show_title') %}
+                        <h2 itemprop="headline" class="qx-title">
+                            {% if field('link_titles') %}
+                                {{ item.title | link(link, '', 'itemprop="url"') }}
+                            {% else %}
+                                {{ item.title }}
+                            {% endif %}                    
+                        </h2>
+                        {% endif %}
+                    {% elseif name == 'art_meta' %}
+                        <div class="qx-post-meta">
+                            {% if field('show_date') %}
+                            <span class="qx-element-jarticle-date" itemprop="datePublished">
+                                {% if field('show_meta_icon') %}
+                                    <i class="qxif-calendar-alt"></i>
+                                {% endif %}
+                                
+                                {{ item.displayDate }}
+                            </span>
+                            {% endif %}
+
+                            {% if field('show_author') %}
+                            <span class="qx-element-jarticle-writtenby"  itemprop="author" temscope itemtype="https://schema.org/Person">
+                                {% if field('show_meta_icon') %}
+                                    <i class="qxif-user"></i>
+                                {% endif %}
+                                
+                                {{ item.author }}
+                            </span>
+                            {% endif %}
+                            
+                            {% if field('show_category') %}
+                            <span class="qx-element-jarticle-category" itemprop="genre">
+                                {% if field('show_meta_icon') %}
+                                    <i class="qxif-folder-open"></i>
+                                {% endif %}
+                                
+                                {{ item.category_title }}
+                            </span>
+                            {% endif %}
+                        </div>                                       
+                    {% elseif name == 'art_image' %}
+                        {% if field('show_image') and images.image_intro %}
+                            <figure class="item-image" itemprop="image">
+                                    {{ image(images.image_intro, images.image_intro_alt, 'qx-media-object qx-img-responsive')  }}
+                            </figure>
+                        {% endif %}
+                    {% elseif name == 'art_content' %}
+                        {% if field('show_content') %}
+                        <div class="article-body" itemprop="articleBody">
+                            {% if content_type == "introtext" %}
+                                {{ item.displayIntrotext|raw }}
+                            {% elseif content_type == "fulltext" %}
+                                {{ item.fulltext|raw }}
+                            {% else %}
+                                {{ item.text|raw }}
+                            {% endif %}
+                        </p>
+                        {% endif %}                                         
+                    {% elseif name == 'art_button' %}
+                        {% if field('show_readmore') %}
+                            {% set btnClass = 'qx-btn qx-flex qx-flex-middle qx-flex-inline ' ~ field('readmore_style') ~ ' ' ~ field('readmore_size') %}
+
+                            {% if enable_Bicon == true %}
+                                {% if icon_alignment.value == 'left' %}
+                                    {{ ( '' ~ icon ~ ' ' ~ '<span>' ~ buttonText ~ '</span>') | link(link, btnClass, 'itemprop="url"') }}
+                                {% else %}
+                                    {{ ('' ~ '<span>' ~ buttonText ~ '</span>' ~ ' ' ~ icon ~ '') | link(link, btnClass, 'itemprop="url"') }}
+                                {% endif %}
+                            {% else %}                                           
+                                {{ buttonText | link(link, btnClass, 'itemprop="url"') }}
+                            {% endif %}                            
+
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+               
+            </article>
+        {% else %}
+            <p class="qx-alert qx-alert-warning qx-m-0">Article not found!</p>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,47 @@
+{% set id = field("id") %}
+{% set class = field("class") %}
+{% set classes = classNames('qx-element qx-element-counter-v2', visibilityClass(node.visibility), class) %}
+
+{# counter field #}
+{% set count_start = field('count_start') %}
+{% set count_end = field('count_end') %}
+{% set prefix = field('counter_prefix') %}
+{% set suffix = field('suffix') %}
+{% set title = field('title') %}
+
+{# Wrapper Class #}
+{% set wrapperClassesForCounter = classNames('qx-element-counter__wrapper') %}
+
+{% set animation = field("animation") %}
+{% set animationRepeat = field("animation_repeat") %}
+{% set animationDelay = field('animation_delay').value %}
+{% set background = field('background') %}
+  
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+      <div class="{{ wrapperClassesForCounter }}">
+        <div class="counter-wrapper">
+          <div class="counter-count" qx-scrollspy="cls: qx-animation-fade; repeat: true">
+            <span class="counter-prefix">{{prefix}}</span>
+
+            <span id="counter-mount">{{ field("count_start") }}</span>
+
+            <span class="counter-suffix">{{suffix}}</span>
+          </div>
+
+          <div class="counter-title">
+            {% if title %}
+              {{title}}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+  {% endblock %}
+{% endembed %}

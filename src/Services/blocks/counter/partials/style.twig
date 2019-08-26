@@ -1,0 +1,25 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}";
+
+// Number Color
+style.css( id + ' .counter-count', 'color', {{ field('number_color') | json_encode() }});
+
+// Number typography
+style.typography(id + ' .counter-count', {{ field('number_typo') | json_encode() }});
+
+// Number padding
+style.padding(id + ' .counter-count span', {{ field('number_padding') | json_encode() }})
+
+// Title Color
+style.css( id + ' .counter-title', 'color', {{ field('title_color') | json_encode() }});
+
+// Title typography
+style.typography(id + ' .counter-title', {{ field('title_typo') | json_encode() }});
+
+// title padding
+style.padding(id + ' .counter-title', {{ field('title_padding') | json_encode() }})
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

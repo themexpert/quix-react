@@ -1,0 +1,175 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+    checkHeightOption = {{ field("height_option")| json_encode() }},
+    overlayBgColor = {{ field("overlay_bg_color")| json_encode() }},
+    overlaySelector = id + " .qx-overlay-primary",
+    sliderProWrapper = id + " .qx-slideshow",
+    sliderProItem = id + " .slider-pro-item",
+    sliderBgOverlayColor = id + ' .qx-overlay-primary',
+    sliderContentWrapper = id + ' .slider-content-wrapper',
+    slideContent = id + ' .slide-content',
+    slideContentTitle = id + ' .slide-content h2',
+    slideContentDescription = id + ' .slide-content p',
+    slideContentButton = id + ' .slide-content a.qx-btn',
+    slideContentButtonIcon = id + ' ul li .slide-content a.qx-btn',    
+    arrowSelector = id + " .qx-icon *",
+    arrowHoverSelector = id + " .qx-icon",
+    arrowNavSpace = id + " .qx-slidenav",
+    arrowSpace = id + " .qx-slidenav-container",
+    dotNav = id + " .qx-dotnav ",
+    dotSelector = id + " .qx-dotnav li",
+    dotItemSelector = id + " .qx-dotnav li *",
+    dotActiveItemSelector = id + " .qx-dotnav li.qx-active *",
+    navigationThumbSelector = id + " .qx-thumbnav li a *",
+    navigationActiveThumbSelector = id + " .qx-thumbnav li.qx-active a *",
+    barNavSelector = id + " .bar-navigation .qx-barnav",
+    barNavigationActiveSelector = id + " .bar-navigation .qx-barnav li.qx-active",
+    barNavHrSelector = id + " .bar-navigation .qx-barnav-horizontal",
+    barNavigationHr = id + " .bar-navigation .qx-barnav-horizontal li",
+    barNavVerSelector = id + " .bar-navigation .qx-barnav-vertical",
+    barNavigationVer = id + " .bar-navigation .qx-barnav-vertical li",
+    barNavigation = id + " .bar-navigation .qx-barnav li",
+
+    iconBtb = {{ field("icon") | json_encode() }},
+    iconBtn_alignment = {{ field("icon_alignment").value | json_encode() }},
+    iconBtn_spacing = {{ field("icon_spacing") | json_encode() }},
+    iconBtnSelector = id + ' a.qx-btn svg,' + id + ' a.qx-btn i', 
+    imgSelector = id + "{{ " .slider-pro-item " ~ greaterThanSign() ~ " img"}}",
+    image_size = {{ field("image_size").value | json_encode() }};
+
+
+{# For Icon #}
+if( iconBtb.media ) {
+  if( iconBtb.media.type == "svg" ) {
+    var size = {{ prepareSvgSizeValue(field("icon").media.properties.size)|json_encode() }};
+
+    style.css( iconBtnSelector + " path", "fill", iconBtb.media.properties.color )
+    style.css( iconBtnSelector, 'width', size.value +  size.unit)
+    style.css( iconBtnSelector, 'height', size.value +  size.unit)
+    
+    style.css( iconBtnSelector, 'color', iconBtb.media.properties.color)
+    style.css( iconBtnSelector, 'font-size', size.value +  size.unit)
+  }
+}
+
+{# For Icon Spacing #}
+if( iconBtn_alignment == 'left'){
+  style.css( iconBtnSelector, 'margin-right', iconBtn_spacing.value +  iconBtn_spacing.unit)
+} else if( iconBtn_alignment == 'right'){
+  style.css( iconBtnSelector, 'margin-left', iconBtn_spacing.value +  iconBtn_spacing.unit)
+}
+
+{# slide #}
+style.margin( slideContent, {{ field("slides_margin") | json_encode() }})
+style.padding( slideContent, {{ field("slides_padding") | json_encode() }})
+style.css( slideContent, 'background-color', {{ field('content_bg') | json_encode() }});
+style.responsiveCss(sliderContentWrapper, {{ field("content_width") | json_encode() }}, 'width', {{ field("content_width").unit | json_encode() }});
+style.border(slideContent, {{ field("content_border") | json_encode() }} );
+style.phone( imgSelector, style._prop('height', '100%'))
+style.css( imgSelector, 'object-fit', image_size);
+
+
+
+{# slider height #}
+style.responsiveCss(sliderProWrapper + '.slider-height-custom,' + sliderProWrapper + ' ul.custom-height', {{ field("height_custom") | json_encode() }}, 'height', {{ field("height_custom").unit | json_encode() }});
+style.css( sliderProWrapper + ' ul.custom-height', 'max-height', '100%');
+style.css( sliderProWrapper + ' ul.custom-height', 'min-height', 'auto !important');
+
+{# title #}
+style.css( slideContentTitle, 'color', {{ field('title_text_color') | json_encode() }});
+style.typography( slideContentTitle, {{ field('title_font') | json_encode() }});
+style.margin( slideContentTitle, {{ field("title_margin") | json_encode() }})
+
+{# content #}
+style.css( slideContentDescription, 'color', {{ field('description_text_color') | json_encode() }});
+style.typography( slideContentDescription, {{ field('description_font') | json_encode() }});
+style.margin( slideContentDescription, {{ field("description_margin") | json_encode() }})
+
+{# button #}
+style.css( slideContentButton, 'color', {{ field('btn_text_color') | json_encode() }});
+style.css( slideContentButton + ':hover', 'color', {{ field('btn_hover_text_color') | json_encode() }});
+style.css( slideContentButtonIcon + ':hover i', 'color', {{ field('hover_icon_color') | json_encode() }});
+style.css( slideContentButton, 'background-color', {{ field('btn_bg_color') | json_encode() }});
+style.css( slideContentButton + ':hover', 'background-color', {{ field('btn_hover_bg_color') | json_encode() }});
+
+style.typography( slideContentButton, {{ field('button_font') | json_encode() }});
+style.padding( slideContentButton, {{ field("button_padding") | json_encode() }})
+style.margin( slideContentButton, {{ field("button_margin") | json_encode() }})
+style.border(slideContentButton, {{ field("button_border") | json_encode() }} )
+
+{# Arrow Color #}
+style.css (arrowSelector, "color", {{ field("arrow_color") | json_encode() }})
+style.css (arrowHoverSelector + ":hover *", "color", {{ field("arrow_hover_color") | json_encode() }})
+style.responsiveCss(arrowSelector, {{ field("arrow_size") | json_encode() }}, 'width', {{ field("arrow_size").unit | json_encode() }});
+style.responsiveCss(arrowSelector, {{ field("arrow_size") | json_encode() }}, 'height', {{ field("arrow_size").unit | json_encode() }});
+style.padding(arrowNavSpace, {{ field("arrow_nav_spacing") | json_encode() }});
+style.margin(arrowSpace, {{ field("arrow_spacing") | json_encode() }});
+style.background (arrowSelector, {{ field("arrow_nav_bg") | json_encode() }});
+
+{# Arrow Border and Padding #}
+style.border(arrowSelector, {{ field("arrow_border") | json_encode() }} );
+style.padding(arrowSelector, {{ field("arrow_padding") | json_encode() }});
+
+{# Dot Color #}
+style.css (dotItemSelector, "background-color", {{ field("dot_color") | json_encode() }})
+style.css (dotActiveItemSelector, "background-color", {{ field("dot_active_color") | json_encode() }})
+style.css (dotNav, "background-color", {{ field("dot_bg") | json_encode() }})
+style.responsiveCss(dotItemSelector, {{ field("dot_width") | json_encode() }}, 'width', {{ field("dot_width").unit | json_encode() }});
+style.responsiveCss(dotItemSelector, {{ field("dot_width") | json_encode() }}, 'height', {{ field("dot_width").unit | json_encode() }});
+style.responsiveCss(dotSelector, {{ field("dot_spacing") | json_encode() }}, 'padding-left', {{ field("dot_spacing").unit | json_encode() }});
+style.padding(dotNav, {{ field("dot_padding") | json_encode() }});
+style.border(dotNav, {{ field("dot_border") | json_encode() }} );
+style.css(dotSelector + ":first-child", "padding-left", "0");
+
+{# Bar Nav #}
+style.css (barNavHrSelector, "display", "flex");
+style.css (barNavHrSelector, "flex-wrap", "wrap");
+style.css (barNavHrSelector, "margin", "0");
+style.css (barNavHrSelector, "padding", "0");
+style.css (barNavHrSelector, "list-style", "none");
+style.css (barNavHrSelector, "margin-left", "-12px");
+
+style.css (barNavigationHr, "padding-left", "12px");
+style.css (barNavigationHr + ":first-child", "padding-left", "0");
+style.css (barNavigationHr + " a", "background-color", "rgba(238, 238, 238, 1)");
+style.css (barNavigationHr + " a", "text-indent", "100%");
+style.css (barNavigationHr + " a", "overflow", "hidden");
+style.css (barNavigationHr + " a", "display", "block");
+style.css (barNavigationHr + " a", "box-sizing", "border-box");
+style.css (barNavigationHr + " a", "white-space", "nowrap");
+
+style.css (barNavVerSelector, "display", "inline");
+style.css (barNavVerSelector, "list-style", "none");
+style.css (barNavigationVer + " a", "background-color", "rgba(238, 238, 238, 1)");
+style.css (barNavigationVer + " a", "text-indent", "100%");
+style.css (barNavigationVer + " a", "overflow", "hidden");
+style.css (barNavigationVer + " a", "display", "block");
+style.css (barNavigationVer + " a", "box-sizing", "border-box");
+style.css (barNavigationVer + " a", "white-space", "nowrap");
+style.css (barNavigationVer + ":first-child", "padding-top", "0");
+style.css(barNavigationVer, "padding-top", "12px");
+
+style.css (barNavigationHr + " a", "background-color", {{ field("bar_color") | json_encode() }});
+style.css (barNavigationVer + " a", "background-color", {{ field("bar_color") | json_encode() }});
+style.css (barNavigationActiveSelector + " a", "background-color", {{ field("bar_active_color") | json_encode() }});
+style.responsiveCss(barNavigationHr + " a", {{ field("bar_width") | json_encode() }}, 'width', {{ field("bar_width").unit | json_encode() }});
+style.responsiveCss(barNavigationHr + " a", {{ field("bar_height") | json_encode() }}, 'height', {{ field("bar_height").unit | json_encode() }});
+style.responsiveCss(barNavigationVer + " a", {{ field("bar_width") | json_encode() }}, 'height', {{ field("bar_width").unit | json_encode() }});
+style.responsiveCss(barNavigationVer + " a", {{ field("bar_height") | json_encode() }}, 'width', {{ field("bar_height").unit | json_encode() }});
+style.responsiveCss(barNavigationActiveSelector + " a", {{ field("barActive_width") | json_encode() }}, 'width', {{ field("barActive_width").unit | json_encode() }});
+style.responsiveCss(barNavigationActiveSelector + " a", {{ field("barActive_height") | json_encode() }}, 'height', {{ field("barActive_height").unit | json_encode() }});
+
+
+{# Overlay Background Color #}
+style.css( overlaySelector, 'background', {{ field("overlay_bg_color")| json_encode() }} );
+
+
+{# navigation #}
+style.responsiveCss(navigationThumbSelector, {{ field("thumb_width") | json_encode() }}, 'width', {{ field("thumb_width").unit | json_encode() }});
+style.responsiveCss(navigationThumbSelector, {{ field("thumb_height") | json_encode() }}, 'height', {{ field("thumb_height").unit | json_encode() }});
+
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

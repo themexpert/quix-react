@@ -1,0 +1,26 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}",
+    headlineTextSelector = id + " .qx-element__before-text, .qx-element__after-text",
+    highlightSelector = id + " .qx-element-headline-dynamic-wrapper span, "+ id + " .qx-element-headline-dynamic-wrapper b",
+    svgSelector = id + " .qx-element-headline--style-highlight";
+          
+// Alignment
+style.alignment(id, {{ field('animate_alignment') | json_encode() }});
+style.alignment(id, {{ field('nanimate_alignment') | json_encode() }});
+
+// Shape
+style.css(svgSelector + ' svg path', 'stroke', {{ field('animate_shapeColor') | json_encode() }});
+style.css(svgSelector + ' svg path', 'stroke-width', "{{ field('animate_shapeWeight').value ~ field('animate_shapeWeight').unit }}");
+
+// Text
+style.css( headlineTextSelector, 'color', {{ field('headline_color') | json_encode() }});
+style.typography( headlineTextSelector, {{ field('headline_font') | json_encode() }});
+
+// Highlight
+style.css( highlightSelector, 'color', {{ field('highlight_color') | json_encode() }});
+style.typography( highlightSelector, {{ field('highlight_font') | json_encode() }});
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

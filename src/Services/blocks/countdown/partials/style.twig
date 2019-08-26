@@ -1,0 +1,46 @@
+{% include 'global.twig' %}
+
+var id = "#{{ field("id") }}";
+
+{% if field("view") == 'inline' %}
+style.css( id + ' .qx-countdown-label,' + id + ' .qx-countdown-number', 'display', 'inline-block');	
+{% else %}
+style.css( id + ' .qx-countdown-label,' + id + ' .qx-countdown-number', 'display', 'block');
+{% endif %}
+
+// digits
+// Text Color
+style.css( id + ' .qx-countdown-label', 'color', {{ field('label_color') | json_encode() }});
+// typography
+style.typography(id + ' .qx-countdown-label', {{ field('label_typo') | json_encode() }});
+
+// content
+// Text Color
+style.css( id + ' .qx-countdown-number', 'color', {{ field('digit_color') | json_encode() }});
+// typography
+style.typography(id + ' .qx-countdown-number', {{ field('digit_typo') | json_encode() }});
+
+
+// Boxes
+// Background > .qx-btn 
+style.background (id + ' .qx-countdown-item', {{ field("box_background") | json_encode() }})
+// padding 
+style.padding(id + ' .qx-countdown-item', {{ field("box_padding") | json_encode() }})
+// margin 
+style.margin(id + ' .qx-countdown-item', {{ field("box_margin") | json_encode() }})
+
+// separator
+// color and line-height
+style.css( id + ' .qx-countdown-separator', 'color', {{ field('separator_color') | json_encode() }});
+style.css( id + ' .qx-countdown-separator', 'line-height', "{{ field('separator_linehight').value }}");
+// padding 
+style.padding(id + ' .qx-countdown-separator', {{ field("separator_padding") | json_encode() }})
+// margin 
+style.margin(id + ' .qx-countdown-separator', {{ field("separator_margin") | json_encode() }})
+
+// Background
+style.background (id + ' .qx-countdown-separator', {{ field("separator_background") | json_encode() }})
+
+{% if renderer %}
+    style.load(id);
+{% endif %}

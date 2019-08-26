@@ -1,0 +1,14 @@
+{% set id = field('id') %}
+{% set pauseOnHover = field('pause_on_hover')|default('false') %}
+{% set autoplay = field('auto_play')|default('false') %}
+{% set autoplaySpeed = field('autoplay_speed')|default('300') %}
+
+setTimeout(function() {
+  var option = {
+    autoplay: {{ autoplay }},
+    pauseOnHover: {{ pauseOnHover }},
+    autoplayInterval: {{ autoplaySpeed }},
+    finite: {{ field('infinite_loop')|default('false') ? 'false' : 'true' }}
+  }
+  qxUIkit.slider("#media-carousel-{{ id }}", option);
+}, 700)
