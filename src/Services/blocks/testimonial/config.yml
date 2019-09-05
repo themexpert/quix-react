@@ -1,163 +1,101 @@
 name: Testimonial
 slug: testimonial
-groups: general
+groups: content
 form:
   general:
-    - name : testimonial_fg_text
-      label: Text
-      type: fields-group
-      status: open
-      schema:
-        - name: content
-          label: Testimonial
-          type: textarea
-          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
 
-        - name: tname
-          label: Name
-          type: text
-          value: John Doe  
+    - name: name
+      value: John Doe
 
-        - name: position
-          label: Position
-          type: text
-          value: Developer
+    - name: company
+      help: Put designation and company name here. Eg, Creative Director, ThemeXpert 
+      label: Job Title, Company Name
+      value: CEO, Acme INC.
 
-    - name : testimonial_fg_media
-      label: Image
-      type: fields-group
-      schema:
-        - name: image
-          type: media
-          value: 'libraries/quix/assets/images/placeholder.png'
+    - name: image
+      type: file-manager
 
-        - name: alt_text
-          label : Alt Text
-          type: text
-          help : Google focuses on alt text when trying to understand what an image is about. So it's valuable for SEO, in addition to being useful for users.
-          depends:
-            image: '*'
+    - name: testimony
+      type: editor
+      value: Lorem ipsum dolor sit amet timeam deleniti mnesarchum ex sed alii hinc dolores ad cum. Urbanitas similique ex nam paulo temporibus ea vis id odio adhuc nostrum eos.
 
-        - name: caption
-          type: text 
-          depends:
-            image: '*'
-
+    - name: name_tag
+      type: select
+      multiple: false
+      label: Name Tag
+      value: h4
+      help: Default title Tag is h4
+      options:
+        h1: H1
+        h2: H2
+        h3: H3
+        h4: H4
+        h5: H5
+        h6: H6
+        p: p
   styles:
-    - name : testimonial_fg_testimonial
-      label: Testimonial
-      type: fields-group
-      schema :
-        - name : content_alignment
-          type : choose
-          value:
-            desktop: center
-            tablet : center
-            phone : center
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right : 
-              label : Right
-              icon : qxuicon-align-right
+    - name: image_style
+      type: divider
 
-        - name  : content_spacing
-          label : Spacing
-          type: slider
-          max : 80
-          value:
-            desktop : 20
-            tablet : 20
-            phone : 20
+    - name: image_style
+      type: select
+      value: square
+      lable: Image Style 
+      options:
+        img-square : Square
+        img-rounded: Rounded 
+        img-circle : Circle
 
-        - name  : content_color
-          label : Testimonial Color
-          type  : color
+    - name: image_margin
+      type: margin
 
-        - name: content_font
-          label : Typography
-          type: typography 
+    - name: title_style
+      type: divider
 
-    - name : testimonial_fg_name
-      label: Name
-      type: fields-group
-      schema :
-        - name  : name_spacing
-          label : Spacing
-          type: slider
-          max : 50
-          value:
-            desktop : 5
-            tablet : 5
-            phone : 5
+    - name: title_font
+      type: typography
 
-        - name  : name_color
-          label : Color
-          type  : color
+    - name: title_color
+      type: color
 
-        - name: name_font
-          label : Typography
-          type: typography
+    - name: title_margin
+      type: margin
 
-    - name : testimonial_fg_position
-      label: Position
-      type: fields-group
-      schema :
+    - name: designation_style
+      type: divider
 
-        - name  : position_color
-          label : Color
-          type  : color
+    - name: designation_font
+      type: typography
 
-        - name: position_font
-          label : Typography
-          type: typography
+    - name: designation_color
+      type: color
 
-    - name    : image_fields_group
-      label   : Image
-      type    : fields-group
-      schema  :
+    - name: content_style
+      type: divider
 
-        - name : width
-          label : Width
-          type: slider
-          value: 65
-          max : 300
-          min : 20
-          suffix : 'px'
+    - name: font
+      type: typography
 
-        - name : image_alignment
-          label: Position
-          type : choose
-          value: top
-          responsive: false
-          options:
-            left :
-              label : Left
-              icon : qxuicon-arrow-to-left
-            right : 
-              label : Right
-              icon : qxuicon-arrow-to-right
-            top :
-              label: Top
-              icon : qxuicon-arrow-to-top
-            bottom :
-              label: Bottom
-              icon : qxuicon-arrow-to-bottom
+    - name: text_color
+      type: color
+      label: Text Color
 
-        
-        - name  : image_spacing
-          label : Spacing
-          type: slider
-          max : 100
-          value: 
-            desktop : 15
-            tablet : 15
-            phone : 15    
+    - name: content_margin
+      type: margin
 
-        - name : image_border_radius
-          label : Border Radius
-          type : dimensions
+    - name: global_style
+      type: divider
+
+    - name: bg_color
+      type: color
+      label: Background Color
+
+    - name: margin
+      type: margin
+
+    - name: padding
+      type: padding
+
+
+
+

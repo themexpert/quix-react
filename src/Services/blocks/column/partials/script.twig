@@ -1,4 +1,4 @@
 {# loading children ( ELEMENT ) script... #}
 {% if renderer %}
-  {{_render( node['children'], null, 'frontend' ) | raw  }}
+  {{renderer.render( node['children'], null, 'frontend' ) | raw  }}
 {% endif %}

@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 import QXElement from './Components/QXElement';
 
+window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 window.axios = require('axios');
+for (const style of ['qxbs', 'qxkit', 'quix', 'qxi']) {
+  const css = `http://try.getquix.net/libraries/quix/assets/css/${style}.css?ver=2.5.6.1`;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = css;
+  document.head.appendChild(link);
+}
+require('./Helpers/Assets');
 
 export default class QXViewer extends Component {
 

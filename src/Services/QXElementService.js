@@ -29,6 +29,9 @@ files.keys().forEach(_file => {
   else if (__file[3] === 'style.twig') {
     elements[name].style = module;
   }
+  else if (__file[3] === 'script.twig') {
+    elements[name].script = module;
+  }
 });
 
 export function getElement(slug) {

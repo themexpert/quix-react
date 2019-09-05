@@ -1,7 +1,6 @@
 <?php
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-use Joomla\Registry\Registry;
 
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_content/models', 'ContentModel');
@@ -10,7 +9,7 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_content/models', 'Con
 * Joomla article element class
 * instead of using direct method use class
 */
-class QuixJoomlaArticlesElement
+class QuixJoomlArticleElementClass
 {
   public $element;
   function __construct(){
@@ -83,7 +82,7 @@ class QuixJoomlaArticlesElement
 
       if (isset($this->element['show_root']))
       {
-        array_unshift($options, JHtml::_('select.option', 'root', JText::_('JGLOBAL_ROOT')));
+        array_unshift($options, JHtml::_('select.option', '0', JText::_('JGLOBAL_ROOT')));
       }
     }
     else
@@ -140,21 +139,13 @@ class QuixJoomlaArticlesElement
    *
    * @since  1.6
    */
-  public static function getAjax($data = array())
+  public static function getList(&$params)
   {
-    $app       = JFactory::getApplication();
-    
-    if(!$data){
-      $data = $app->input->get('data', '', 'BASE64', 'raw');
-      $data = base64_decode($data);      
-    }
-
-    $params = new Registry($data);
-    
     // Get an instance of the generic articles model
     $articles = JModelLegacy::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
 
     // Set application parameters in model
+    $app       = JFactory::getApplication();
     $contentParams = JComponentHelper::getParams('com_content');
     // Load the parameters.
     if(!$app->isAdmin()){
@@ -231,13 +222,13 @@ class QuixJoomlaArticlesElement
     $items = $articles->getItems();
 
     // Display options
-    $show_date        = $params->get('show_date', 1);
+    $show_date        = $params->get('show_date', 0);
     $show_date_field  = $params->get('show_date_field', 'created');
     $show_date_format = $params->get('show_date_format', 'Y-m-d H:i:s');
-    $show_category    = $params->get('show_category', 1);
-    $show_hits        = $params->get('show_hits', 1);
-    $show_author      = $params->get('show_author', 1);
-    $show_introtext   = $params->get('show_introtext', 1);
+    $show_category    = $params->get('show_category', 0);
+    $show_hits        = $params->get('show_hits', 0);
+    $show_author      = $params->get('show_author', 0);
+    $show_introtext   = $params->get('show_introtext', 0);
     $introtext_limit  = $params->get('introtext_limit', 100);
 
     // Find current Article ID if on an article page
@@ -256,14 +247,13 @@ class QuixJoomlaArticlesElement
     // Prepare data for display using display options
     foreach ($items as &$item)
     {
-      $item->images = json_decode($item->images);
       $item->slug    = $item->id . ':' . $item->alias;
       $item->catslug = $item->catid . ':' . $item->category_alias;
 
       if ($access || in_array($item->access, $authorised))
       {
         // We know that user has the privilege to view the article
-        $item->link = ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language);
+        $item->link = JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language));
       }
       else
       {
@@ -283,8 +273,6 @@ class QuixJoomlaArticlesElement
 
         $item->link = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
       }
-
-      $item->link = JRoute::_($item->link);
 
       // Used for styling the active article
       $item->active      = $item->id == $active_article_id ? 'active' : '';
@@ -310,7 +298,7 @@ class QuixJoomlaArticlesElement
 
       if ($show_introtext)
       {
-        $item->introtext = JHtml::_('content.prepare', $item->introtext, '', 'mod_articles_category.content');
+        $item->introtext = JHtml::_('content.prepare', $item->introtext);
         $item->introtext = self::_cleanIntrotext($item->introtext);
       }
 

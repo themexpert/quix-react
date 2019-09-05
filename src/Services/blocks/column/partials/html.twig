@@ -39,7 +39,7 @@
             <div class="{{ overlayClass }}"></div>
           {% endif %}
           <div class="qx-elements-wrap">
-            {{_render( node['children'], null, 'frontend' ) | raw  }}
+            {{renderer.render( node['children'], null, 'frontend' ) | raw  }}
           </div>
         </div>
       {% endif %}

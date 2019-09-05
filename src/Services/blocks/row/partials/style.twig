@@ -37,5 +37,5 @@ style.raw (rawCss)
 {% if renderer %}
   style.load(id);
   
-  {{_render( node['children'], null, 'frontend' ) | raw  }}
+  {{ renderer.render( node['children'], null, 'frontend' ) | raw  }}
 {% endif %}

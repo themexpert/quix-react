@@ -52,5 +52,5 @@ style.responsiveCss(elementSelector, {{ field("element_spacing") | json_encode()
 {% if renderer %}
   style.load(id)
   
-  {{_render( node['children'], null, 'frontend' ) | raw  }}
+  {{renderer.render( node['children'], null, 'frontend' ) | raw  }}
 {% endif %}

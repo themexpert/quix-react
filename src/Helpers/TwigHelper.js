@@ -456,12 +456,42 @@ window.greaterThanSign = function() {
 };
 Twig.extendFunction('greaterThanSign', window.greaterThanSign);
 
-Twig.extendFunction('field', function(field) {
-  if (this.context.node[field] !== undefined) {
-    return this.context.node[field];
+function find(key, value) {
+  if (value === null) {
+    return null;
   }
+  if (value[key] !== undefined) {
+    return value[key];
+  }
+  if (Array.isArray(value)) {
+    for (const v of value) {
+      const vv = find(key, v);
+      if (vv) {
+        return vv;
+      }
+    }
+  }
+  else if (typeof value === 'object') {
+    for (const v in value) {
+      if (value.hasOwnProperty(v)) {
+        const vv = find(key, value[v]);
+        if (vv) {
+          return vv;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+Twig.extendFunction('field', function(field) {
   if (field === 'html_tag') {
     return 'div';
+  }
+  const fields = this.context.node.form;
+  const val = find(field, fields);
+  if (val) {
+    return val;
   }
   return null;
 });

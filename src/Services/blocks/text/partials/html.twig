@@ -18,11 +18,6 @@
     "background" : background
 } %}
     {% block element %}
-    	{% if event %}
-    		{{ prepareContent(field('content'), event)|raw }}
-    	{% else %}
 	        {{ field('content')|raw }}
-    	{% endif %}
-
     {% endblock %}
 {% endembed %}

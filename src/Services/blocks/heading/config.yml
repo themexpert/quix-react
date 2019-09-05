@@ -1,95 +1,125 @@
 name: Heading
 slug: heading
-groups: general
+groups: content
+
 form:
   general:
-    - name : heading_fields_group
-      label: Title
-      type: fields-group
-      status: open
-      schema:
-        - name: title
-          type: textarea
-          value: Add Your Heading Text Here.
-          help: You can add HTML also.
-      
-        - name: html_tag
-          label: HTML Tag
-          type: select
-          value: h2
-          options:
-            h1: H1
-            h2: H2
-            h3: H3
-            h4: H4
-            h5: H5
-            h6: H6
-            div: div
-            span: span
-            p: p
-        
-        - name : alignment
-          type : hidden
-  
-    - name : heading_links_fields_group
-      label: Link
-      type: fields-group
-      schema:
-        - name: link
-          label: Link Url
-          type: link
-        
+    - name: title_text
+      type: text
+      value: Heading Text
+
+    - name: paragraph_text
+      type: editor
+      label: Subtitle
+
+    - name: subtitle_position
+      type: select
+      value: after_title
+      options:
+        before_title : Before Title 
+        after_title : After Title
+
+    - name: title_tag
+      type: select
+      multiple: false
+      label: Title Tag
+      value: h2
+      help: Default title Tag is h2
+      options:
+        h1: H1
+        h2: H2
+        h3: H3
+        h4: H4
+        h5: H5
+        h6: H6
+        div: DIV
+
+    - name: alignment
+      type: select
+      value: center
+      label: Text Alignment
+      options:
+        left: Left
+        center: Center
+        right: Right
+      image: true
+      responsive: true
+
   styles:
-    - name    : opt_fields_group
-      label   : Options
-      status  : open
-      type    : fields-group
-      schema  :
-        - name : nalignment
-          label : Alignment
-          type : choose
-          responsive : true
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right : 
-              label : Right
-              icon : qxuicon-align-right
-            justify :
-              label : Justify
-              icon : qxuicon-align-justify
+    - name: title_style
+      type: divider
+      label: Title Style
 
-        - name  : text_color
-          label : Text Color
-          type  : color
-          depends:
-            enable_bg : false
-        
-        - name  : enable_bg
-          label : Enable Text Background
-          type  : switch
-          value : false
-          help  : When text background is enabled, text color option will not work. Set your color from background color settings. Also Blend mode will not work for text background.
+    - name: title_font
+      type: typography
+      label: Font
 
-        - name  : text_bg
-          label : Text Background
-          type  : background
-          parallax: false
-          # tab: normal
-          depends:
-            enable_bg : true
+    - name: title_text_color
+      type: color
+      label: Text Color
 
-    - name : heading_typo_fields_group
-      label: Typography
-      type: fields-group
-      schema :
-        - name: font
-          type: typography
-          units: %, px, rem
+    - name: title_text_margin
+      type: margin
+      label: Margin 
 
-      
-    
+    - name: title_span_note
+      type: divider 
+      label: Wrap words from title text with <span> will apply this styles. Eg - Hello <span>Beautiful</span> World.
+
+    - name : title_span_font
+      type: typography
+      label: Span Font 
+
+    - name : title_span_color
+      type: color 
+      label: Span Color
+
+    - name: subtitle_style
+      type: divider
+      label: Subtitle Style
+
+    - name: paragraph_font
+      type: typography
+      label: Font
+
+    - name: paragraph_text_color
+      type: color
+      label: Text Color
+
+    - name: paragraph_text_margin
+      type: margin
+      label: Margin 
+
+    - name: element
+      type: divider
+      label: Element Style - Apply On Element Body
+
+    - name: bg_color
+      type: color 
+      label: Background Color
+
+    - name: enable_border
+      type: switch
+      label: Border
+
+    - name: border_width
+      type: text
+      label: Border Width 
+      value: 1px 0px
+      help: Single or multiple value is allowed. Eg- 1px OR 1px 0 1px 0 etc.
+      depends:
+        enable_border: true
+
+    - name: border_color
+      type: text
+      label: Border Color 
+      value: '#2196F3 transparent'
+      help: 'Single or multiple value is allowed. Eg- #2196F3 OR #2196F3 transparent red transparent'
+      depends:
+        enable_border: true
+
+    - name: margin
+      type: margin
+
+    - name: padding
+      type: padding

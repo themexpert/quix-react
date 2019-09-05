@@ -1,229 +1,118 @@
 name: Accordion
 slug: accordion
-groups: general
+groups: interactive
 form:
   general:
-    - name : accordion_fg_element_mode
-      label: Accordion
+    - name: accordions
       type: group-repeater
       schema:
         - name: title
-          label: Title
-          type: text
-          value: Title goes here
+          value: Accordion Title
 
-        - name: description
-          label: Description
+        - name: content
           type: editor
-          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+          value: Lorem ipsum dolor sit amet timeam deleniti mnesarchum ex sed alii hinc dolores ad cum. Urbanitas similique ex nam paulo temporibus ea vis id odio adhuc nostrum eos.
 
-        - name: icon_divider
-          type: divider
-          label: Tab Icon
+        - name: enable_icon
+          type: switch
 
         - name: icon
-          label: Icon
-          type: media
-          filters: icon
+          type : icon
+          help: Icon will visible left to the title
+          depends:
+            enable_icon : true
       value:
-        - title: Accordion Item 1
-          description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
-          icon: 'libraries/quix/assets/images/placeholder.png'
+        - title: Accordion Title
+          content: Lorem ipsum dolor sit amet timeam deleniti mnesarchum ex sed alii hinc dolores ad cum. Urbanitas similique ex nam paulo temporibus ea vis id odio adhuc nostrum eos
 
-        - title: Accordion Item 2
-          description: Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          icon: 'libraries/quix/assets/images/placeholder.png'
+    - name: type
+      type: select
+      value: accordion
+      label: Accordion Type
+      help: Accordion - open one section at a time. Expandable - multiple sections to stay open.
+      options:
+        accordion: Accordion
+        expandable: Expandable
 
-    - name : accordion_fg_icon
-      label: Icon
-      type: fields-group
-      schema:
-        - name: global_icon
-          label: Icon
-          type: media
-          filters: icon
-
-    - name: accordion_fg_behaviour
-      label: Behaviour
-      type: fields-group
-      schema:
-        - name: multiple
-          label: Allow Multiple Open Items
-          type: switch
-          value: false
-
-        - name: collapsible
-          label: Allow All Items To Be Closed
-          type: switch
-          value: true
-        
-        - name: close_first
-          label: Close First Item
-          type: switch
-          value: false
-          help: Hints: Enable to close the first item
-
+    - name: first_collapse
+      type: switch
+      label: Collapse First Item
 
   styles:
-    - name: accordion_fg_style
-      label: Items
-      status: open
-      type: fields-group
-      schema:
-        - name: accordion_item_margin
-          label: Margin
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 0
-            bottom: 10
-            left: 0
-            right: 0
-            tablet:
-              top: 0
-              bottom: 20
-              left: 0
-              right: 0
-            phone:
-              top: 0
-              bottom: 20
-              left: 0
-              right: 0          
+    - name: title_style
+      type: divider
+      label: Title Style - Common
 
-        - name: accordion_border
-          label: Border
-          type: border
+    - name: header_font
+      type: typography
+      label: Font
 
+    - name: header_bg_color
+      type: color
+      label: Background
 
-    - name : accordion_fg_title_style
-      label: Title
-      type: fields-group
-      schema:
-        - name: title_font
-          label: Font
-          type: typography
+    - name: header_text_color
+      type: color
+      label: Text Color
 
-        - name: title_color_divider
-          type: divider
-          label: Color
+    - name: title_margin
+      type: margin
+      responsive: true
 
-        - name: title_color
-          label: Color
-          type: color
-          value: #fff
+    - name: title_padding
+      type: padding
+      responsive: true
 
-        - name: title_bg_color
-          label: Background Color
-          type: color
-          value: rgba(247, 252, 255, 1)
+    - name: body
+      type: divider
+      label: Content Style - Common
 
-        - name: title_active_color_divider
-          type: divider
-          label: Active Color
-          value: rgba(239, 239, 251, 1)
+    - name: body_font
+      type: typography
+      label: Font
 
-        - name: title_active_color
-          label: Active Color
-          type: color
+    - name: body_bg_color
+      type: color
+      label: Background
 
-        - name: title_active_bg_color
-          label: Active Background Color
-          type: color
-          value: rgba(238, 246, 251, 1)
+    - name: body_text_color
+      type: color
+      label: Text Color
 
-        - name: title_padding
-          label : Title Padding
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 15
-            bottom: 15
-            left: 15
-            right: 15
-            tablet:
-              top: 15
-              bottom: 15
-              left: 15
-              right: 15
-            phone:
-              top: 15
-              bottom: 15
-              left: 15
-              right: 15
+    - name: body_padding
+      type: padding
+      responsive: true
 
-    - name : accordion_fg_content_style
-      label : Content
-      type: fields-group
-      schema:
-        - name: content_font
-          label: Font
-          type: typography
+    - name: body_margin
+      type: margin
+      responsive: true
 
-        - name: content_color_divider
-          type: divider
-          label: Color
+    - name: icon
+      type: divider
+      label: Icon Style - Common
 
-        - name: content_color
-          label: Color
-          type: color
+    - name: icon_font_size
+      type: slider
+      responsive: true
+      lable: Font Size
+      value : 20
+      suffix: px
 
-        - name: content_bg_color
-          label: Background Color
-          type: color
+    - name: icon_color
+      type: color
+      label: Color
 
-        - name: content_padding
-          label : Padding
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 20
-            bottom: 20
-            left: 15
-            right: 15
-            tablet:
-              top: 20
-              bottom: 20
-              left: 10
-              right: 10
-            phone:
-              top: 20
-              bottom: 20
-              left: 10
-              right: 10
+    - name: element
+      type: divider
+      label: Element Style - Apply On Element Body
 
-    - name : accordion_fg_icon_style
-      label: Icon
-      type: fields-group
-      schema:
-        - name : icon_alignment
-          label: Alignment
-          type : choose
-          responsive: false
-          options:
-            left :
-              label: Left
-              icon : qxuicon-arrow-to-left
-            right :
-              label : Right
-              icon : qxuicon-arrow-to-right
+    - name: border_color
+      type: color
+      label: Border Color
+      help: Apply on every accordion item body.
+    
+    - name: margin
+      type: margin
 
-        - name: icon_active_color
-          label: Active Color
-          type: color
-
-        - name  : icon_spacing
-          label : Spacing
-          type: slider
-          max : 100
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 15
-            tablet : 15
-            phone : 10
-
-
-
+    - name: padding
+      type: padding

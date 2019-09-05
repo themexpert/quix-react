@@ -1,918 +1,381 @@
 name: Slider Pro
 slug: slider-pro
-groups: pro
+groups: interactive
 form:
   general:
-    - name: slider-pro_fg_element
+    - name: sliders 
       type: group-repeater
       schema:
         - name: title
-          type: text
-          value: Slider Heading 1
+          value: Slide Title
 
-        - name: description
+        - name: hide_title
+          label: Hide Title
+          type: switch
+
+        - name: content
           type: editor
-          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
 
-        - name: slide_background_image
-          type: divider
-          label: Background Image
+        - name: alignment
+          label : Horizontal Alignment
+          type: select
+          value: center
+          image: true 
+          options:
+            left: Left
+            center: Center
+            right: Right
 
-        - name: background
-          type: media
-          label: Background Image
-          filters: image, unsplash
-          value: libraries/quix/assets/images/placeholder.png
+        - name: button_enabled
+          type : switch 
+          label: Enabled Button 
 
-        - name: button_text
-          type: text
-          value: Click Me
-
-        - name: link
+        - name: button 
           type: link
-          value:
-            url : '#'
-
-        - name: slide_thumb_image
-          type: divider
-          label: Thumb Image
-
-        - name: thumb_image
-          type: media
-          label: Thumb Image
-          filters: image, unsplash
-          help: Only shows if you select thumbnail form navigation settings.
-          value: libraries/quix/assets/images/placeholder.png
-
-      value:
-        - title : Slider Item 1
-          background : libraries/quix/assets/images/placeholder.png
-          thumb_image : libraries/quix/assets/images/placeholder.png
-          
-        - title : Slider Item 2
-          background : libraries/quix/assets/images/placeholder.png
-          thumb_image : libraries/quix/assets/images/placeholder.png
-
-    - name: slider-pro_fg_alignment
-      label   : Content Alignment
-      type    : fields-group
-      status  : close
-      schema  :
-        - name : text_alignment
-          label: Text Alignment
-          type : choose
-          responsive : false
-          value: center
-          help: hints: Align the text to the left, center, and right
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right :
-              label : Right
-              icon : qxuicon-align-right
-
-        - name : horizontal_position
-          label: Horizontal Position
-          type : choose
-          responsive : false
-          value: center
-          help: hints: Move the content horizontally
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right :
-              label : Right
-              icon : qxuicon-align-right
-
-        - name : vertical_position
-          label: Vertical Position
-          type : choose
-          responsive : false
-          value: center
-          help: hints: Move the content vertically
-          options:
-            top :
-              label: Top
-              icon : qxuicon-arrow-to-top
-            center :
-              label : Center
-              icon : qxuicon-minus
-            bottom :
-              label : Bottom
-              icon : qxuicon-arrow-to-bottom
-
-    - name: slider-pro_fg_display
-      label   : Display
-      type    : fields-group
-      status  : close
-      schema  :
-        - name : show_title
-          label: Show Title
-          type : switch
-          value: true
-
-        - name : show_content
-          label: Show Content
-          type : switch
-          value: true
-
-        - name : show_button
-          label: Show Button
-          type : switch
-          value: true
-
-        - name: enable_icon
-          type: switch
-          label: Enable Icon
-          value: false
-
-        - name: icon
-          type : media
-          filters: icon
-          help: Icon will visible left to the title
           depends:
-            enable_icon: true
+            button_enabled: true
 
-        - name : icon_alignment
-          type : choose
-          label: Icon Placement
-          value: left
-          responsive: false
+        - name: image
+          type: file-manager
+          label: Background Image 
+          help: If defined, this image will be used as the background for this slide. To remove a background image, simply delete the URL from the settings field.
+
+        - name: image_position
+          type: select
+          label: Background Image Position 
+          value: initial
           options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            right : 
-              label : Right
-              icon : qxuicon-align-right
+            initial: Default
+            center: Center
+            top left : Top Left 
+            top center : Top Center
+            top right: Top Right
+            center right: Center Right
+            center left: Center Left
+            bottom left: Bottom Left
+            bottom center: Bottom Center
+            bottom right: Bottom Right
           depends:
-            enable_icon: true          
+            image : '*'
 
-    - name: slider-pro_fg_overlay
-      label   : Overlay Color
-      type    : fields-group
-      status  : close
-      schema  :
-        - name: enable_overlay
-          label: Enable Overlay
-          type: switch
-          value: true
+        - name : image_size
+          type : select
+          label : Background Image Size
+          value : initial
+          options :
+            initial : Default
+            cover : Cover 
+            contain : Contain 
+          depends:
+            image : '*'
 
-        - name: overlay_bg_color
-          label: Overlay Color
+        - name: bg_color
           type: color
-          value: rgba(0, 0, 0, 0.5)
-          depends:
-            enable_overlay: true
-
-    - name: slider-pro_fg_animation
-      label   : Slide Animation
-      type    : fields-group
-      status  : close
-      schema  :
-        - name : slide_animation
-          label: Animation
-          type : select
-          value: 'slide'
-          options:
-            'slide' : 'Slide'
-            'fade' : 'Fade'
-            'scale' : 'Scale'
-            'pull' : 'Pull'
-            'push' : 'Push'
+          lable: Background Color
         
-        - name: slide_kenburns
-          label: Enbale Kenburns
+        - name : bg_overlay
+          label: Background Overlay
           type: switch
-          value: false
         
-        - name: slide_kenburns_reverse
-          label: Reverse Kenburns
-          type: switch
-          value: false
-          depends:
-            slide_kenburns: true
+      value:
+        - title: Slide Title
 
-    - name: slider-pro_fg_transitions
-      label   : Content Animation
-      type    : fields-group
-      status  : close
-      schema  :
-        - name: content_transitions
-          label: Enable Content Transitions
-          type: switch
-          value: false
-          help: Hint: If use content transitions, don't need to use the content parallax.
-        
-        - name: transitions_effect
-          label: Transition Effect
-          type: select
-          value: 'qx-transition-fade'
-          options:
-            'qx-transition-fade': 'Fade'
-            'qx-transition-scale-up': 'Scale Up'
-            'qx-transition-scale-down': 'Scale Down'
-            'qx-transition-slide-top': 'Slide Top'
-            'qx-transition-slide-bottom': 'Slide Bottom'
-            'qx-transition-slide-left': 'Slide Left'
-            'qx-transition-slide-right': 'Slide Right'
-            'qx-transition-slide-top-small': 'Slide Top Small'
-            'qx-transition-slide-bottom-small': 'Slide Bottom Small'
-            'qx-transition-slide-left-small': 'Slide Left Small'
-            'qx-transition-slide-right-small': 'Slide Right Small'
-            'qx-transition-slide-bottom-medium': 'Slide Bottom Medium'
-            'qx-transition-slide-left-medium': 'Slide Left Medium'
-            'qx-transition-slide-right-medium': 'Slide Right Medium'
-          depends:
-            content_transitions: true
-          help: ""
-        
-        - name: content_parallax
-          label: Enable Content Parallax
-          type: switch
-          value: false
-          help: Hint: If use content parallax, don't need to use the content transition.
-        
-        - name: for_heading
-          label: For Heading
-          type: switch
-          value: false
-          depends:
-            content_parallax: true
-        
-        - name: heading_effect
-          label: Select Effect Style
-          type: select
-          value: 'x'
-          options:
-            'x': 'X'
-            'y': 'Y'
-          depends:
-            for_heading: true
-        
-        - name: heading_paraIN
-          label: Parallax IN
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_heading: true
-        
-        - name: heading_ParaOut
-          label: Parallax Out
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_heading: true
+    - name: v_center
+      label : Vertica Center Text
+      type: switch
+      value: true
+      
+    - name : slider_height
+      type: select
+      value : custom
+      options:
+        custom : Custom Height 
+        full : Full Height 
 
-        - name: for_desc
-          label: For Description
-          type: switch
-          value: false
-          depends:
-            content_parallax: true
-        
-        - name: desc_effect
-          label: Select Effect Style
-          type: select
-          value: 'x'
-          options:
-            'x': 'X'
-            'y': 'Y'
-          depends:
-            for_desc: true
-        
-        - name: desc_paraIN
-          label: Parallax IN
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_desc: true
-        
-        - name: desc_ParaOut
-          label: Parallax Out
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_desc: true
+    - name : custom_height
+      type: slider 
+      max : 1000
+      step : 10
+      value: 400
+      suffix: px 
+      depends :
+        slider_height : custom
 
-        - name: for_button
-          label: For Button
-          type: switch
-          value: false
-          depends:
-            content_parallax: true
-        
-        - name: button_effect
-          label: Select Effect Style
-          type: select
-          value: 'x'
-          options:
-            'x': 'X'
-            'y': 'Y'
-          depends:
-            for_button: true
-        
-        - name: button_paraIN
-          label: Parallax IN
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_button: true
-        
-        - name: button_ParaOut
-          label: Parallax Out
-          type: slider
-          max: 500
-          min: -500
-          value: 0
-          units: none
-          defaultUnit: none
-          responsive: false
-          depends:
-            for_button: true
-        
+    - name: utilities
+      type: divider 
 
-    - name: slider-pro_fg_height
-      label   : Height
-      type    : fields-group
-      status  : close
-      schema  :
+    - name: parallax_image
+      type: switch
 
-        - name : height_option
-          label: Height
-          type : select
-          value: 'default'
-          options:
-            'default' : 'Default'
-            'custom' : 'Custom'
-            'fit-to-screen' : 'Fit to Screen'
+    - name: arrows
+      type: switch
+      value: true
+      help: This setting allows you to turn the navigation arrows on or off.
 
-        - name : height_custom
-          label: Custom Height
-          type : slider
-          max : 2000
-          defaultUnit: px
-          value:
-            desktop : 1000
-            tablet : 600
-            phone : 400
-          depends:
-            height_option: custom
+    - name: dots
+      type: switch
+      label: Dots Navigation 
+      value: true
+      help: Disabling this option will remove the circle button at the bottom of the slider.
 
-    - name: slider-pro_fg_navigation
-      label: Navigation
-      type: fields-group
-      schema:
-        - name : slide_nav
-          label: Slidenav
-          type : select
-          value: 'default'
-          options:
-            'none' : 'None'
-            'default' : 'Default'
-            'top-left' : 'Top Left'
-            'top-right' : 'Top Right'
-            'center-left' : 'Center Left'
-            'center-right' : 'Center Right'
-            'bottom-left' : 'Bottom Left'
-            'bottom-center' : 'Bottom Center'
-            'bottom-right' : 'Bottom Right'
+    - name: autoplay
+      type: switch
+      labe: Auto Play
+      value: true
+      help: If you would like the slider to slide automatically, without the visitor having to click the next button.
 
-        - name : navigation
-          label: Navigation
-          type : select
-          value: 'dot-inside'
-          options:
-            'none' : 'None'
-            'dot-inside' : 'Dot Inside'
-            'dot-outside' : 'Dot Outside'
-            'thumb-inside' : 'Thumb Inside'
-            'thumb-outside' : 'Thumb Outside'
-
-        - name : navigation_outside_position
-          label: Position
-          depends:
-            navigation: ['dot-outside', 'thumb-outside']
-          type : select
-          value: 'center'
-          options:
-            'left' : 'Left'
-            'center' : 'Center'
-            'right' : 'Right'
-
-        - name : navigation_inside_position
-          label: Position
-          depends:
-            navigation: ['dot-inside','thumb-inside']
-          type : select
-          value: 'bottom-center'
-          options:
-            'top-left' : 'Top Left'
-            'top-right' : 'Top Right'
-            'center-left' : 'Center Left'
-            'center-right' : 'Center Right'
-            'bottom-left' : 'Bottom Left'
-            'bottom-center' : 'Bottom Center'
-            'bottom-right' : 'Bottom Right'
-
-        - name  : thumb_width
-          label : Thumb Width
-          type: slider
-          depends:
-            navigation: ['thumb-inside', 'thumb-outside']
-          max : 200
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 100
-            tablet : 50
-            phone : 35
-
-        - name  : thumb_height
-          label : Thumb Height
-          type: slider
-          depends:
-            navigation: ['thumb-inside', 'thumb-outside']
-          max : 200
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 100
-            tablet : 50
-            phone : 35
-
-        - name : navigation_margin
-          label: Margin
-          type : select
-          value: 'medium'
-          options:
-            'none' : 'None'
-            'small' : 'Small'
-            'medium' : 'Medium'
-            'large' : 'Large'
-
-        - name: bar_navigation
-          label: Enable Bar Nav
-          type: switch
-          value: false
-        
-        - name: bar_vertical
-          label: For Vertical
-          type: switch
-          value: false
-          depends:
-            bar_navigation: true           
-
-        - name : barNav_position
-          label: Position
-          type : select
-          value: 'bottom-center'
-          options:
-            'top-left' : 'Top Left'
-            'top-right' : 'Top Right'
-            'center-left' : 'Center Left'
-            'center-right' : 'Center Right'
-            'bottom-left' : 'Bottom Left'
-            'bottom-center' : 'Bottom Center'
-            'bottom-right' : 'Bottom Right'
-          depends:
-            bar_navigation: true
-
-        - name : barNav_margin
-          label: Margin
-          type : select
-          value: 'medium'
-          options:
-            'none' : 'None'
-            'small' : 'Small'
-            'medium' : 'Medium'
-            'large' : 'Large'
-          depends:
-            bar_navigation: true                     
-
-    - name: slider-pro_fg_settings
-      label: Behaviour
-      type: fields-group
-      schema:
-        - name: pause_on_hover
-          label: Pause on Hover
-          type: switch
-          value: true
-
-        - name: autoplay
-          type: switch
-          value: true
-
-        - name: autoplay_speed
-          label: Autoplay Speed ( MS )
-          type: text
-          value: 5000
-          depends:
-            autoplay: true
-
-        - name: infinite_loop
-          label: Infinite Loop
-          type: switch
-          value: true
-
+    - name: autoplay_speed
+      type: text
+      label: Autoplay Speed 
+      value: 5000
+      help: Autoplay Speed in milliseconds
+      depends:
+        autoplay: true
 
   styles:
-    - name: slider-pro_fg_slider-style
-      label: Content Style
-      type: fields-group
-      status: open
-      schema:
-        - name: slides_margin
-          label : Margin
-          type: dimensions
-          defaultUnit: px
 
+    - name: title_styles
+      type: divider
 
-        - name: slides_padding
-          label : Padding
-          type: dimensions
-          defaultUnit: px
-        
-        - name: content_bg
-          label: Content Background
-          type: color
-        
-        - name  : content_width
-          label : Content Width
-          type: slider
-          max : 100
-          units: '%'
-          defaultUnit: '%'
-          value: 50
+    - name: header_font
+      type: typography
+      label: Font 
 
-        - name: content_border
-          label: Content Border
-          type: border
+    - name: header_color
+      type: color 
+      label: Color
 
-    - name: slider-pro_fg_title-style
-      label: Title
-      type: fields-group
-      schema:
-        - name  : title_text_color
-          label : Text Color
-          type  : color
-          value: rgba(255, 255, 255, 1)
+    - name : header_margin
+      type: margin 
+      label: Margin
 
-        - name: title_font
-          label: Font
-          type: typography
-
-        - name: title_margin
-          label : Margin
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 0
-            bottom: 20
-            left: 0
-            right: 0
-            tablet:
-              top: 0
-              bottom: 20
-              left: 0
-              right: 0
-            phone:
-              top: 0
-              bottom: 20
-              left: 0
-              right: 0
-
-    - name: slider-pro_fg_description-style
-      label: Description
-      type: fields-group
-      schema:
-        - name  : description_text_color
-          label : Text Color
-          type  : color
-          value: rgba(255, 255, 255, 1)
-
-        - name: description_font
-          label: Font
-          type: typography
-
-        - name: description_margin
-          label : Margin
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 0
-            bottom: 25
-            left: 0
-            right: 0
-            tablet:
-              top: 0
-              bottom: 20
-              left: 0
-              right: 0
-            phone:
-              top: 0
-              bottom: 30
-              left: 0
-              right: 0
-
-    - name: slider-pro_fg_image-style
-      label: Image
-      type: fields-group
-      schema:
-        - name  : image_size
-          label : Image size
-          type  : choose
-          responsive : false
-          value: cover
-          options:
-            contain :
-              label: contain
-            cover :
-              label : cover
-            fill :
-              label : fill
-            scale-down :
-              label : scale-down
-            unset :
-              label : unset
-            none :
-              label : none
+    - name: header_span_note
+      type: divider 
+      label: Wrap words from title text with <span> will apply this styles. Eg - Hello <span>Beautiful</span> World.
     
-    - name: slider-pro_fg_button-style
-      label: Button
-      type: fields-group
-      schema:
-        - name  : btn_text_color
-          label : Text Color
-          type  : color
-          value: rgba(255, 255, 255, 1)
+    - name : header_span_font
+      type: typography
+      label: Span Font 
 
-        - name  : btn_hover_text_color
-          label : Hover Text Color
-          type  : color
+    - name : header_span_color
+      type: color 
+      label: Span Color
 
-        - name  : btn_bg_color
-          label : Background Color
-          type  : color
+    - name : header_span_newline
+      type : switch
+      label: Span New Line
 
-        - name  : btn_hover_bg_color
-          label : Hover Background Color
-          type  : color
+    - name: content_styles
+      type: divider
+    
+    - name: body_font
+      type: typography
+      label: Font 
+    
+    - name: body_color
+      type: color
+      label: Color
 
-        - name  : hover_icon_color
-          label : Hover Icon Color
-          type  : color
-          
-        - name: icon_spacing
-          label: Icon Spacing
-          type: slider
-          responsive: false
-          units: px
-          defaultUnit: px
-          max: 250
-          default: 20          
+    - name: body_margin
+      type: margin
+      type: Margin
 
-        - name: button_font
-          label: Font
-          type: typography
+    - name: button_styles
+      type: divider
 
-        - name: button_padding
-          label : Padding
-          type: dimensions
-          units: px
-          defaultUnit: px
-          value:
-            top: 15
-            bottom: 15
-            left: 30
-            right: 30
-            tablet:
-              top: 10
-              bottom: 10
-              left: 30
-              right: 30
-            phone:
-              top: 10
-              bottom: 10
-              left: 20
-              right: 20
+    - name: button_font
+      type: typography
+      label: Font 
 
+    - name: button_style
+      type: switch
+      label: Custom Style
+      help: Enable this for custom button style.
 
-        - name: button_margin
-          label : Margin
-          type: dimensions
-          units: px
-          defaultUnit: px
+    - name: button_bg
+      type: color 
+      label: Background Color 
+      depends:
+        button_style : true 
 
-        - name: button-border-divider
-          type: divider
-          label: Border
+    - name: button_text
+      type: color 
+      label: Text Color 
+      depends:
+        button_style : true 
 
-        - name: button_border
-          label: Border
-          type: border
+    - name: button_border_width
+      type: slider 
+      label: Border Width 
+      suffix: px
+      depends:
+        button_style : true 
 
-    - name    : slider-pro_fg_arrow-style
-      label   : Arrow Nav
-      type    : fields-group
-      status  : close
-      schema  :
-        - name: arrow_divider
-          type: divider
-          label: Arrow         
+    - name: button_border_color
+      type: color 
+      label: Border Color 
+      depends:
+        button_style : true 
 
-        - name: arrow_color
-          label: Arrow Color
-          type: color
-          value: rgba(247, 247, 247, 0.6)
+    - name: button_border_radius
+      type: slider 
+      label: Border Radius 
+      suffix: px
+      depends:
+        button_style : true
 
-        - name: arrow_hover_color
-          label: Arrow Hover Color
-          type: color
+    - name: button_bg_hover
+      type: color 
+      label: Hover Background Color 
+      depends:
+        button_style : true 
 
-        - name: arrow_size
-          label : Arrow Size
-          type: slider
-          max : 100
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 25
-            tablet : 25
-            phone : 20
+    - name: button_text_hover
+      type: color 
+      label: Hover Text Color 
+      depends:
+        button_style : true 
 
-        - name: arrow_padding
-          label: Arrow Padding
-          type: dimensions
-          units: px
-          defaultUnit: px
-        
-          
-        - name: arrow_nav_spacing
-          label: Arrow Nav Space
-          type: dimensions
-          units: px
-          defaultUnit: px
-        
-        - name: arrow_spacing
-          label: Arrow Space
-          type: dimensions
-          units: px
-          defaultUnit: px                     
+    - name: button_border_color_hover
+      type: color 
+      label: Hover Border Color 
+      depends:
+        button_style : true 
 
-        - name: arrow_nav_bg
-          label: Arrow Background Color
-          type: background
-        
-        - name: arrow_border
-          label: Arrow Border
-          type: border
-          
-    - name    : slider-pro_fg_dot-style
-      label   : Dot Nav
-      type    : fields-group
-      status  : close
-      schema  :
-        - name: dot_divider
-          type: divider
-          label: Dot
+    - name : button_margin
+      type : margin
+      label: Margin
 
-        - name: dot_color
-          label: Dot Color
-          type: color
-          value: rgba(238, 238, 238, 1)
+    - name: misc_styles
+      type: divider
 
-        - name: dot_active_color
-          label: Dot Active Color
-          type: color
-          value: rgba(102, 102, 102, 0.6)
-        
-        - name: dot_bg
-          label: Dot Background Color
-          type: color
+    - name: arrow_color
+      type: color
+      label: Arrow Color
+      depends : 
+        arrows : true
 
-        - name: dot_padding
-          label: Dot Background Padding
-          type: dimensions
-          units: px
-          defaultUnit: px          
+    - name: dots_color
+      type: color
+      label: Dots Nav Color
+      depends : 
+        dots : true
 
-        - name  : dot_width
-          label : Dot Width
-          type: slider
-          max : 100
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 15
-            tablet : 15
-            phone : 15
+    - name: global_style
+      type: divider
 
-        - name  : dot_spacing
-          label : Dot Spacing
-          type: slider
-          max : 100
-          units: px
-          defaultUnit: px
-          value:
-            desktop : 12
-            tablet : 12
-            phone : 10
+    - name: margin
+      type: margin
 
-        - name: dot_border
-          label: Dot Background Border
-          type: border
+    - name: padding
+      type: padding
 
-    - name    : slider-pro_fg_bar-style
-      label   : Bar Nav
-      type    : fields-group
-      status  : close
-      schema  :
-        - name: bar_divider
-          type: divider
-          label: Bar
+  animation :
 
-        - name: bar_color
-          label: Bar Color
-          type: color
-          value: rgba(238, 238, 238, 1)
+    - name : slider_items_animation
+      type : divider 
 
-        - name: bar_active_color
-          label: Bar Active Color
-          type: color
-          value: rgba(102, 102, 102, 0.6)   
+    - name: title_animation
+      type: select
+      help: Animation apply on slider title. Live example of all animations is here - bit.ly/quix-demo
+      value: fadeInDown
+      options:
+        0: None
+        fadeIn : Fade In
+        fadeInDown : Fade In Down
+        fadeInLeft : Fade In Left
+        fadeInRight : Fade In Right
+        fadeInUp : Fade In Up
+        bounceIn : Bounce In
+        bounceInDown : Bounce In Down
+        bounceInLeft : Bounce In Left
+        bounceInRight : Bounce In Right
+        bounceInUp : Bounce In Up
+        slideInUp : Slide In Up
+        slideInDown : Slide In Down
+        slideInLeft : Slide In Left
+        slideInRight : Slide In Right
+        rotateIn : Rotate In
+        rotateInDownLeft : Rotate In Down Left
+        rotateInDownRight : Rotate In Down Right
+        rotateInUpLeft : Rotate In Up Left
+        rotateInUpRight : Rotate In Up Right
+        zoomIn : Zoom In
+        zoomInDown : Zoom In Down
+        zoomInLeft : Zoom In Left
+        zoomInRight : Zoom In Right
+        zoomInUp : Zoom In Up
+        flipInX : Flip In X
+        flipInY : Flip In Y
+        lightSpeedIn : Light Speed In
+        rollIn : Roll In
 
-        - name  : bar_width
-          label : Bar Width
-          type: slider
-          max : 100
-          units: px
-          help: Hint: Height for Vartical bar
-          defaultUnit: px
-          value:
-            desktop : 25
-            tablet : 25
-            phone : 25
+    - name: content_animation
+      type: select
+      help: Animation apply on slider content. Live example of all animations is here - bit.ly/quix-demo
+      value: fadeInDown
+      options:
+        0: None
+        fadeIn : Fade In
+        fadeInDown : Fade In Down
+        fadeInLeft : Fade In Left
+        fadeInRight : Fade In Right
+        fadeInUp : Fade In Up
+        bounceIn : Bounce In
+        bounceInDown : Bounce In Down
+        bounceInLeft : Bounce In Left
+        bounceInRight : Bounce In Right
+        bounceInUp : Bounce In Up
+        slideInUp : Slide In Up
+        slideInDown : Slide In Down
+        slideInLeft : Slide In Left
+        slideInRight : Slide In Right
+        rotateIn : Rotate In
+        rotateInDownLeft : Rotate In Down Left
+        rotateInDownRight : Rotate In Down Right
+        rotateInUpLeft : Rotate In Up Left
+        rotateInUpRight : Rotate In Up Right
+        zoomIn : Zoom In
+        zoomInDown : Zoom In Down
+        zoomInLeft : Zoom In Left
+        zoomInRight : Zoom In Right
+        zoomInUp : Zoom In Up
+        flipInX : Flip In X
+        flipInY : Flip In Y
+        lightSpeedIn : Light Speed In
+        rollIn : Roll In
 
-        - name  : barActive_width
-          label : Bar Active Width
-          type: slider
-          max : 100
-          units: px
-          help: Hint: Width (Active) for Vartical bar
-          defaultUnit: px         
-
-        - name  : bar_height
-          label : Bar Height
-          type: slider
-          max : 100
-          units: px
-          help: Hint: Width for Vartical bar
-          defaultUnit: px
-          value:
-            desktop : 5
-            tablet : 5
-            phone : 5
-
-        - name  : barActive_height
-          label : Bar Active Height
-          type: slider
-          max : 100
-          units: px
-          help: Hint: Height (Active) for Vartical bar
-          defaultUnit: px
+    - name: btn_animation
+      type: select
+      help: Animation apply on slider button. Live example of all animations is here - bit.ly/quix-demo
+      value: fadeInUp
+      options:
+        0: None
+        fadeIn : Fade In
+        fadeInDown : Fade In Down
+        fadeInLeft : Fade In Left
+        fadeInRight : Fade In Right
+        fadeInUp : Fade In Up
+        bounceIn : Bounce In
+        bounceInDown : Bounce In Down
+        bounceInLeft : Bounce In Left
+        bounceInRight : Bounce In Right
+        bounceInUp : Bounce In Up
+        slideInUp : Slide In Up
+        slideInDown : Slide In Down
+        slideInLeft : Slide In Left
+        slideInRight : Slide In Right
+        rotateIn : Rotate In
+        rotateInDownLeft : Rotate In Down Left
+        rotateInDownRight : Rotate In Down Right
+        rotateInUpLeft : Rotate In Up Left
+        rotateInUpRight : Rotate In Up Right
+        zoomIn : Zoom In
+        zoomInDown : Zoom In Down
+        zoomInLeft : Zoom In Left
+        zoomInRight : Zoom In Right
+        zoomInUp : Zoom In Up
+        flipInX : Flip In X
+        flipInY : Flip In Y
+        lightSpeedIn : Light Speed In
+        rollIn : Roll In

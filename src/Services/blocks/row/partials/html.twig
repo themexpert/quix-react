@@ -32,6 +32,6 @@
     {% set overlayClass = "qx-background-overlay " ~ id ~ "-background-overlay" %}
     <div class="{{ overlayClass }}"></div>
   {% endif %}
-   {{_render( node['children'], null, 'frontend' ) | raw}}
+   {{ renderer.render( node['children'], null, 'frontend' ) | raw}}
 </div>
 {{ "</" ~ field("html_tag") ~ ">"}}

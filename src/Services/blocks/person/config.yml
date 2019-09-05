@@ -1,208 +1,222 @@
 name: Person
 slug: person
-groups: general
+groups: content
 form:
   general:
-    - name : person_fg_image
-      label: Image
-      type: fields-group
-      status: open
+    - name: name
+      type: text
+      help: Input the name of the person
+      value: Team Member 1
+
+    - name: position
+      type: text
+      help: Input the person's position.
+      value: Company Role
+
+    - name: image
+      type: file-manager
+      help: Upload your desired image, or type in the URL to the image you would like to display.
+
+    - name: description
+      type: editor
+      value: Aenean consectetur ipsum ante, vel egestas enim tincidunt quis. Pellentesque vitae congue neque, vel mattis ante. In vitae tempus nunc.
+
+    - name: social
+      type: input-repeater
+      label: Social Links
+      help: 
       schema:
-        - name: image
-          type: media
-          value: 'libraries/quix/assets/images/placeholder.png'
-
-        - name: alt_text
-          label : Alt Text
-          type: text
-          help : Google focuses on alt text when trying to understand what an image is about. So it's valuable for SEO, in addition to being useful for users.
-          depends:
-            image: '*'
-
-        - name: link
-          label: Link
-          type: link
-
-    - name : person_fg_details
-      label: Details
-      type: fields-group
-      schema:
-        - name: pname
-          label: Name
-          type: text
-          value: Jenny Doe
-
-        - name: position
-          label: Designation
-          type: text
-          value: Designer
-
-        - name: description
-          label: Description
-          type: editor
-          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
-
-        - name: html_tag
-          label: Name HTML Tag
-          type: select
-          value: h3
-          options:
-            h1: H1
-            h2: H2
-            h3: H3
-            h4: H4
-            h5: H5
-            h6: H6
+        name: link
+        type: text
+      value: ['https://www.twitter.com/themexpert']
 
   styles:
-    - name: person_fg_panel
-      label: Panel
-      type: fields-group
-      status: open
-      schema:
-        - name : content_alignment
-          label: Alignment
-          type : choose
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right :
-              label : Right
-              icon : qxuicon-align-right
-            justify :
-              label : Justify
-              icon : qxuicon-align-justify
+    - name: title_styles
+      type: divider
 
-        - name : content_v_align
-          label: Content Position
-          type : choose
-          responsive: false
-          help: Works when image position set left or right. Set image position left or right to see its action.
-          options:
-            qx-align-items-start :
-              label: Top
-              icon : qxuicon-arrow-to-top
-            qx-align-items-center :
-              label : Middle
-              icon : qxuicon-minus
-            qx-align-items-end :
-              label : Bottom
-              icon : qxuicon-arrow-to-bottom
+    - name: header_font
+      type: typography
+      lable: Font
 
-        - name: content_padding
-          label: Padding
-          type: dimensions
-          units: %, px, em, rem, vh
-          value:
-            top: 0
-            bottom: 0
-            left: 0
-            right: 0
-            tablet:
-              top: 0
-              bottom: 0
-              left: 0
-              right: 0
-            phone:
-              top: 0
-              bottom: 0
-              left: 0
-              right: 0
+    - name: header_color
+      type: color 
+      label: Text Color
+
+    - name: header_margin
+      type: margin
+      lable: Margin
+
+    - name: position_styles
+      type: divider
+
+    - name: position_font
+      type: typography
+      lable: Font
+
+    - name: position_color
+      type: color 
+      label: Text Color
+
+    - name: image_styles
+      type: divider
+      label: Image Styles
+
+    - name: image_style
+      type: select
+      value: square
+      lable: Image Style
+      options:
+        img-square : Square
+        img-rounded: Rounded
+        img-circle : Circle
+
+    - name: image_margin
+      type: margin
+      label: Image Margin
+
+    - name: social_style
+      type: divider
+
+    - name: icon_color
+      type: color 
+      label: Icon Color 
+
+    - name: icon_hover_color
+      type: color 
+      label: Icon Hover Color 
     
-    - name: person_fg_image_style
-      label: Image
-      type: fields-group
-      schema:
-        - name : image_alignment
-          label: Position
-          type : choose
-          responsive: false
-          options:
-            left :
-              label: Left
-              icon : qxuicon-arrow-to-left
-            center :
-              label : Top
-              icon : qxuicon-arrow-to-top
-            right :
-              label : Right
-              icon : qxuicon-arrow-to-right
+    - name: body_styles
+      type: divider
+      label: Content Style
 
-        - name  : image_spacing
-          label : Spacing
-          type: slider
-          max : 100
-          value:
-            desktop : 15
-            tablet : 15
-            phone : 10
+    - name: body_font
+      type: typography
+      label: Font
 
-        - name: img_border_radius
-          label : Border Radius
-          type: dimensions
+    - name: body_text_color
+      type: color 
+      label: Text Color
 
-        - name : img_width
-          label : Image Width
-          type: slider
-          units: %, px
-          defaultUnit: %
-          max: 2000
-          value: 
-            desktop : 100
-            tablet : 100
-            phone : 100
+    - name: body_margin
+      type: margin
+      label: Margin
 
-    - name: person_fg_name_style
-      label: Name
-      type: fields-group
-      schema:
-        - name: name_spacing
-          label : Spacing
-          type: slider
-          max : 100
-          value: 10
+    - name: global_style
+      type: divider
+      label: Global Style
 
-        - name: name_color
-          label: Color
-          type: color
+    - name: alignment
+      type: select
+      value: left
+      label: Text Alignment
+      image: true
+      options:
+        left: Left
+        center: Center
+        right: Right
 
-        - name: name_font
-          label: Font
-          type: typography
+    - name: bg_color
+      type: color 
+      labe: Background Color 
 
-    - name: person_fg_position_style
-      label: Position
-      type: fields-group
-      schema:
-        - name: position_spacing
-          label: Spacing
-          type: slider
-          responsive: true
-          max : 100
-          value: 10
+    - name: bg_image
+      type: file-manager 
+      label: Background Image
 
-        - name: position_color
-          label: Color
-          type: color
+    - name : box_shadow
+      type : switch
+      label : Enable Box Shadow   
 
-        - name: position_font
-          label: Font
-          type: typography
+    - name : box_shadow_color
+      type : color 
+      label : Color 
+      depends:
+        box_shadow : true 
 
-    - name: person_fg_description_style
-      label: Description
-      type: fields-group
-      schema:
-        - name: description_color
-          label: Color
-          type: color
+    - name : box_shadow_blur
+      type : slider
+      label : Blur 
+      max : 200
+      suffix : px
+      depends:
+        box_shadow : true 
 
-        - name: description_font
-          label: Font
-          type: typography
+    - name : box_shadow_spread
+      type : slider
+      label : Spread 
+      max : 200
+      suffix : px
+      depends:
+        box_shadow : true  
 
+    - name : box_shadow_horizontal
+      type : slider
+      label : Horizontal 
+      min : -250
+      max : 250
+      suffix : px
+      depends:
+        box_shadow : true 
 
+    - name : box_shadow_vertical
+      type : slider
+      label : Vertical 
+      min : -250
+      max : 250
+      suffix : px
+      depends:
+        box_shadow : true 
+
+    - name : box_shadow_inset
+      type : switch 
+      label : Inset 
+      help : If specified, the shadows are drawn inside the frame.
+      depends:
+        box_shadow : true     
+
+    - name: border
+      type: switch
+      label: Enable Border
+
+    - name: border_width
+      type: slider
+      label: Border Width
+      suffix: px
+      value: 2
+      depends:
+        border: true
+
+    - name: border_radius
+      type: slider
+      label: Border Radius
+      suffix: px
+      value: 3
+      depends:
+        border: true
+
+    - name: border_style
+      type: select
+      value: solid
+      depends:
+        border: true
+      options:
+        solid: Solid
+        dotted: Dotted
+        dashed: Dashed
+        double: Double
+        groove: Groove
+        ridge: Ridge
+        inset: Inset
+        outset: Outset
+
+    - name: border_color
+      type: color
+      label: Border Color
+      depends:
+        border: true
+
+    - name: margin
+      type: margin
+
+    - name: padding
+      type: padding

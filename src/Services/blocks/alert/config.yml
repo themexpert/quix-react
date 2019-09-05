@@ -1,91 +1,109 @@
 name: Alert
 slug: alert
-groups: general
+groups: content
 form:
   general:
-    - name : alert_fg_text
-      label: Alert
-      type: fields-group
-      status: open
-      schema:
-        - name: heading
-          label : Heading
-          type: text
-          value: This is an Alert
+    - name: content
+      type: editor
+      value: Lorem ipsum dolor sit amet timeam deleniti mnesarchum ex sed alii hinc dolores ad cum. Urbanitas similique ex nam paulo temporibus ea vis id odio adhuc nostrum eos.
 
-        - name: content
-          label: Content
-          type: editor
-          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+    - name: alert_style
+      type: select
+      label: Alert Type
+      value: info
+      options:
+       success: Success
+       info: Info
+       warning: Warning
+       danger: Danger
 
-        - name: type
-          label: Type
-          type: select
-          value: qx-alert-primary
-          options:
-            qx-alert-primary: Primary
-            qx-alert-secondary: Secondary
-            qx-alert-success: Success
-            qx-alert-danger: Danger
-            qx-alert-warning: Warning
-            qx-alert-info: Info
-            qx-alert-light: Light
-            qx-alert-dark: Dark
+    - name: show_close
+      type: switch
+      label: Close Icon
 
-        - name : alignment
-          type : hidden
-          
-        - name : close_option
-          label: Closable
-          help: Show close option for alert message
-          type: switch
-          value: false
-
+    - name: alignment
+      type: select
+      value: left
+      label: Text Alignment
+      options:
+        left: Left
+        center: Center
+        right: Right
+        justify: Justify
+      image: true
+      responsive: true 
 
   styles:
-    - name : alert_fg_alignment_style
-      label: Alignment
-      type: fields-group
-      status  : open
-      schema :
-        - name : nalignment
-          label: Alignment
-          type : choose
-          options:
-            left :
-              label: Left
-              icon : qxuicon-align-left
-            center :
-              label : Center
-              icon : qxuicon-align-center
-            right :
-              label : Right
-              icon : qxuicon-align-right
-            justify :
-              label : Justify
-              icon : qxuicon-align-justify
+    - name: font
+      type: typography
 
-    - name : alert_fg_heading_style
-      label: Heading
-      type: fields-group
-      schema :
-        - name: heading_color
-          label: Color
-          type : color
+    - name : box_shadow_divider
+      type : divider 
+      label : Box Shadow 
 
-        - name: heading_font
-          label : Typography
-          type: typography
+    - name : box_shadow
+      type : switch
+      label : Enable Box Shadow   
 
-    - name    : alert_fg_content_style
-      label   : Content
-      type    : fields-group
-      schema  :
-        - name: content_color
-          label: Color
-          type : color
+    - name : box_shadow_color
+      type : color 
+      label : Color 
+      depends:
+        box_shadow : true 
 
-        - name: content_font
-          label : Typography
-          type: typography
+    - name : box_shadow_blur
+      type : slider
+      label : Blur 
+      min : 0
+      max : 200
+      step : 1
+      suffix : px
+      depends:
+        box_shadow : true 
 
+    - name : box_shadow_spread
+      type : slider
+      label : Spread 
+      min : 0
+      max : 200
+      step : 1
+      suffix : px
+      depends:
+        box_shadow : true  
+
+    - name : box_shadow_horizontal
+      type : slider
+      label : Horizontal 
+      min : -250
+      max : 250
+      step : 1
+      suffix : px
+      depends:
+        box_shadow : true 
+
+    - name : box_shadow_vertical
+      type : slider
+      label : Vertical 
+      min : -250
+      max : 250
+      step : 1
+      suffix : px
+      depends:
+        box_shadow : true 
+
+    - name : box_shadow_inset
+      type : switch 
+      label : Inset 
+      help : If specified, the shadows are drawn inside the frame.
+      depends:
+        box_shadow : true     
+
+    - name : element
+      type : divider
+      label : Element Style - Apply On Element Body
+
+    - name: margin
+      type: margin
+
+    - name: padding
+      type: padding
