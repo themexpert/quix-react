@@ -11,6 +11,13 @@ for (const style of ['qxbs', 'qxkit', 'quix', 'qxi']) {
   link.href = css;
   document.head.appendChild(link);
 }
+for (const js_file of ['qxkit']) {
+  const js = `http://try.getquix.net/libraries/quix/assets/js/${js_file}.js?ver=2.5.6.1`;
+  const script = document.createElement('script');
+  script.src = js;
+  document.head.appendChild(script);
+}
+
 require('./Helpers/Assets');
 
 export default class QXViewer extends Component {
